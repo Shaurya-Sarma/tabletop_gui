@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabletop_gui/screens/login/components/login_form.dart';
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
+class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

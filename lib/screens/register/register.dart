@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabletop_gui/screens/register/components/register_form.dart';
 
-class RegisterScreen extends StatefulWidget {
-  @override
-  _RegisterScreenState createState() => _RegisterScreenState();
-}
-
-class _RegisterScreenState extends State<RegisterScreen> {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

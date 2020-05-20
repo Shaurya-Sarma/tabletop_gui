@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabletop_gui/screens/welcome/components/login_welcome_button.dart';
 import 'package:tabletop_gui/screens/welcome/components/register_welcome_button.dart';
 
-class WelcomeScreen extends StatefulWidget {
-  @override
-  _WelcomeScreenState createState() => _WelcomeScreenState();
-}
-
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
