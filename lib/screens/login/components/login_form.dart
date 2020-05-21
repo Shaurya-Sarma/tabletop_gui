@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:tabletop_gui/main.dart';
 import 'package:tabletop_gui/screens/home/home.dart';
 import 'package:tabletop_gui/screens/login/components/google_button.dart';
 import 'package:tabletop_gui/screens/login/components/facebook_button.dart';
 
-import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -14,15 +13,29 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _email, _password;
+  bool _autoValidate = false;
 
-  Future<String> attemptLogIn(String username, String password) async {
-    var res = await http.post("$SERVER_IP/login",
-        body: {"username": username, "password": password});
-    if (res.statusCode == 200) return res.body;
-    return null;
+  Future<void> userLogin() async {
+    final formState = _formKey.currentState;
+    if (formState.validate()) {
+      formState.save();
+
+      try {
+        FirebaseUser user = (await FirebaseAuth.instance
+                .signInWithEmailAndPassword(email: _email, password: _password))
+            .user;
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomeScreen(user: user)));
+      } catch (e) {
+        print(e.message);
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 
   @override
@@ -31,22 +44,40 @@ class _LoginFormState extends State<LoginForm> {
         key: _formKey,
         child: Column(children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(bottom: 50.0),
+            padding: EdgeInsets.only(bottom: 20.0),
             child: TextFormField(
                 style: TextStyle(color: Colors.white),
-                controller: usernameController,
+                keyboardType: TextInputType.emailAddress,
+                autovalidate: _autoValidate,
+                onSaved: (String input) => _email = input,
+                validator: (String input) {
+                  if (input.isEmpty) {
+                    return "Please enter an email";
+                  } else {
+                    return null;
+                  }
+                },
                 decoration: InputDecoration(
-                  labelText: "Username",
-                  prefixIcon: Icon(Icons.person, color: Colors.white),
+                  labelText: "Email",
+                  prefixIcon: Icon(Icons.email, color: Colors.white),
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white)),
                 )),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 50.0),
+            padding: EdgeInsets.only(bottom: 20.0),
             child: TextFormField(
                 style: TextStyle(color: Colors.white),
-                controller: passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                autovalidate: _autoValidate,
+                onSaved: (String input) => _password = input,
+                validator: (String input) {
+                  if (input.isEmpty) {
+                    return "Please enter a password";
+                  } else {
+                    return null;
+                  }
+                },
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -75,26 +106,8 @@ class _LoginFormState extends State<LoginForm> {
                       fontWeight: FontWeight.w500,
                       fontSize: 22.0),
                 ),
-                onPressed: () async {
-                  var username = usernameController.text;
-                  var password = passwordController.text;
-
-                  var jwt = await attemptLogIn(username, password);
-                  if (jwt != null) {
-                    storage.write(key: "jwt", value: jwt);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomeScreen.fromBase64(jwt)));
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                          title: Text("An Error Occured!"),
-                          content: Text(
-                              "No Account Was Found Matching That Username And Password")),
-                    );
-                  }
+                onPressed: () {
+                  userLogin();
                 },
               )),
           Padding(
@@ -116,7 +129,7 @@ class _LoginFormState extends State<LoginForm> {
               child: RichText(
                 text: TextSpan(
                   text: "Don't Have An Account? ",
-                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
                   children: <TextSpan>[
                     TextSpan(
                       text: 'Register Here',

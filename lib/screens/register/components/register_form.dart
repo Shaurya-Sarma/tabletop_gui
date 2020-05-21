@@ -1,21 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:tabletop_gui/main.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:http/http.dart' as http;
+class RegisterForm extends StatefulWidget {
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
 
-class RegisterForm extends StatelessWidget {
+class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
 
-  Future<int> attemptRegister(
-      String username, String email, String password) async {
-    var res = await http.post('$SERVER_IP/register',
-        body: {"username": username, "email": email, "password": password});
-    return res.statusCode;
+  String _username, _email, _password;
+
+  bool _autoValidate = false;
+
+  Future<void> userRegister() async {
+    final formState = _formKey.currentState;
+    if (formState.validate()) {
+      formState.save();
+
+      try {
+        FirebaseUser user = (await FirebaseAuth.instance
+                .createUserWithEmailAndPassword(
+                    email: _email, password: _password))
+            .user;
+        user.sendEmailVerification();
+        Navigator.pushNamed(context, "/login");
+      } catch (e) {
+        print(e.message);
+      }
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
   }
 
   @override
@@ -25,10 +44,21 @@ class RegisterForm extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(bottom: 50.0),
+              padding: EdgeInsets.only(bottom: 30.0),
               child: TextFormField(
                   style: TextStyle(color: Colors.white),
-                  controller: usernameController,
+                  keyboardType: TextInputType.text,
+                  autovalidate: _autoValidate,
+                  onSaved: (String input) => _username = input,
+                  validator: (String input) {
+                    if (input.isEmpty) {
+                      return "Please enter an username";
+                    } else if (input.length > 40) {
+                      return "Username cannot be more than 40 characters";
+                    } else {
+                      return null;
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: "Username",
                     prefixIcon: Icon(Icons.person, color: Colors.white),
@@ -37,10 +67,24 @@ class RegisterForm extends StatelessWidget {
                   )),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 50.0),
+              padding: EdgeInsets.only(bottom: 30.0),
               child: TextFormField(
                   style: TextStyle(color: Colors.white),
-                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  autovalidate: _autoValidate,
+                  onSaved: (String input) => _email = input,
+                  validator: (String input) {
+                    bool emailValid = RegExp(
+                            r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                        .hasMatch(input);
+                    if (input.isEmpty) {
+                      return "Please enter an email";
+                    } else if (!emailValid) {
+                      return "Please enter a valid email";
+                    } else {
+                      return null;
+                    }
+                  },
                   decoration: InputDecoration(
                     labelText: "Email",
                     prefixIcon: Icon(Icons.email, color: Colors.white),
@@ -49,10 +93,23 @@ class RegisterForm extends StatelessWidget {
                   )),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 50.0),
+              padding: EdgeInsets.only(bottom: 30.0),
               child: TextFormField(
                   style: TextStyle(color: Colors.white),
-                  controller: passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  autovalidate: _autoValidate,
+                  onSaved: (String input) => _password = input,
+                  validator: (String input) {
+                    if (input.isEmpty) {
+                      return "Please enter a password";
+                    } else if (input.length < 4) {
+                      return "Password must have more than 4 characters";
+                    } else if (input.length > 40) {
+                      return "Password must not have more than 40 characters";
+                    } else {
+                      return null;
+                    }
+                  },
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
@@ -73,36 +130,8 @@ class RegisterForm extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                         fontSize: 22.0),
                   ),
-                  onPressed: () async {
-                    var username = usernameController.text;
-                    var email = emailController.text;
-                    var password = passwordController.text;
-
-                    var res = await attemptRegister(username, email, password);
-                    if (res == 201)
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                            title: Text("Success"),
-                            content: Text("You Have Successfully Registered!")),
-                      );
-                    else if (res == 409)
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                            title: Text("Error"),
-                            content: Text(
-                                "That Username Has Been Taken. Please Try Again")),
-                      );
-                    else {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                            title: Text("Error"),
-                            content:
-                                Text("Something Happened. Please Try Again")),
-                      );
-                    }
+                  onPressed: () {
+                    userRegister();
                   },
                 )),
             Padding(
@@ -110,7 +139,7 @@ class RegisterForm extends StatelessWidget {
                 child: RichText(
                   text: TextSpan(
                     text: "Already Have An Account? ",
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
+                    style: TextStyle(color: Colors.white, fontSize: 18.0),
                     children: <TextSpan>[
                       TextSpan(
                         text: 'Login Here',

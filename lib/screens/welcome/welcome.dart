@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tabletop_gui/screens/welcome/components/login_welcome_button.dart';
-import 'package:tabletop_gui/screens/welcome/components/register_welcome_button.dart';
+
+import 'package:tabletop_gui/screens/welcome/components/login_button.dart';
+import 'package:tabletop_gui/screens/welcome/components/register_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override

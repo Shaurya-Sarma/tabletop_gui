@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "768947944894",
+    "firebase_url": "https://tabletop-1e274.firebaseio.com",
+    "project_id": "tabletop-1e274",
+    "storage_bucket": "tabletop-1e274.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768947944894:android:c1a876ed0376b8d0e98def",
+        "android_client_info": {
+          "package_name": "com.example.tabletop_gui"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768947944894-aj3si62be6sgj5tvnob12hpc5hd5csoc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgIzQArlpLUDSXCYy4tTAX4cP4d1CKpWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768947944894-aj3si62be6sgj5tvnob12hpc5hd5csoc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

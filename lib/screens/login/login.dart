@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:tabletop_gui/screens/login/components/login_form.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Container(
+          alignment: Alignment.center,
+          child: ListView(
             children: <Widget>[
-              Padding(
+              Container(
                 padding: EdgeInsets.only(top: 70.0, bottom: 40.0),
+                alignment: Alignment.center,
                 child: Text(
                   "TABLETOP",
                   style: TextStyle(
