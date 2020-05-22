@@ -38,15 +38,26 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.only(top: 20.0),
           child: ListView(
             children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                child: Text(
-                  "TABLETOP",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 30.0),
-                ),
+              Row(
+                children: <Widget>[
+                  new Spacer(),
+                  Padding(
+                      padding: EdgeInsets.only(left: 40.0),
+                      child: Text(
+                        "TABLETOP",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 30.0),
+                      )),
+                  new Spacer(),
+                  Padding(
+                      padding: EdgeInsets.only(right: 15.0),
+                      child: Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                      ))
+                ],
               ),
               _widgetOptions.elementAt(_selectedIndex)
             ],
