@@ -38,6 +38,10 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
+  Future<void> sendPasswordResetEmail(String email) async {
+    return FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -89,10 +93,15 @@ class _LoginFormState extends State<LoginForm> {
           Container(
             alignment: Alignment.centerRight,
             padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              "Forgot Password?",
-              style: TextStyle(color: Colors.white70, fontSize: 16.0),
-            ),
+            child: GestureDetector(
+                onTap: () {
+                  _formKey.currentState.save();
+                  sendPasswordResetEmail(_email);
+                },
+                child: Text(
+                  "Forgot Password?",
+                  style: TextStyle(color: Colors.white70, fontSize: 16.0),
+                )),
           ),
           SizedBox(
               width: double.infinity,

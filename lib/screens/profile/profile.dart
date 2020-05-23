@@ -8,7 +8,7 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(
-                padding: EdgeInsets.only(top: 60.0),
+                padding: EdgeInsets.only(top: 70.0),
                 child: RichText(
                   text: TextSpan(
                       text: "Hello, ",
@@ -24,14 +24,14 @@ class ProfileScreen extends StatelessWidget {
                       ]),
                 )),
             Padding(
-                padding: EdgeInsets.only(top: 30.0),
+                padding: EdgeInsets.only(top: 35.0),
                 child: Icon(
                   Icons.account_circle,
                   color: Colors.white,
-                  size: 225.0,
+                  size: 250.0,
                 )),
             Padding(
-                padding: EdgeInsets.only(top: 40.0),
+                padding: EdgeInsets.only(top: 30.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
