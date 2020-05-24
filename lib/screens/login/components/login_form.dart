@@ -100,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
                 },
                 child: Text(
                   "Forgot Password?",
-                  style: TextStyle(color: Colors.white70, fontSize: 16.0),
+                  style: TextStyle(color: Colors.white70, fontSize: 18.0),
                 )),
           ),
           SizedBox(
@@ -120,15 +120,30 @@ class _LoginFormState extends State<LoginForm> {
                 },
               )),
           Padding(
-            padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
-            child: Text(
-              "Or Connect With",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
+              padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                      child: Divider(
+                    color: Colors.white,
+                    thickness: 2,
+                  )),
+                  Padding(
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      child: Text(
+                        "Or Connect With",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500),
+                      )),
+                  Expanded(
+                      child: Divider(
+                    color: Colors.white,
+                    thickness: 2,
+                  )),
+                ],
+              )),
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: <Widget>[GoogleAuthButton(), FacebookAuthButton()],
