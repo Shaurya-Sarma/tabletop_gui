@@ -19,10 +19,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DocumentSnapshot>(
-        future: getUserData(), builder: builder);
+        future: getUserData(), builder: _buildContext);
   }
 
-  Widget builder(
+  Widget _buildContext(
       BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return Center(child: Text('Please wait its loading...'));

@@ -4,6 +4,8 @@ import 'package:flutter/gestures.dart';
 import 'package:tabletop_gui/screens/board/board.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class LobbyScreen extends StatefulWidget {
   @override
   _LobbyScreenState createState() => _LobbyScreenState();
@@ -17,6 +19,25 @@ class _LobbyScreenState extends State<LobbyScreen> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  _createPrivate() {
+    String gameCode = 'oMa-2dk';
+
+    Firestore.instance.collection("games").add({
+      'id': '$gameCode',
+      'type': 'twenty-nine',
+      'players': [],
+      'game': {
+        'score': 0,
+        'teams': ["", ""],
+      }
+    });
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => BoardScreen(gameCode: gameCode)));
   }
 
   @override
@@ -72,12 +93,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       color: Color(0xff00B16A),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => BoardScreen()));
-                      },
+                      onPressed: () {},
                     )),
                 Padding(
                   padding: EdgeInsets.only(bottom: 30.0),
@@ -92,7 +108,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
                     style: TextStyle(color: Colors.white, fontSize: 18.0),
                   ),
                   color: Color(0xffEB5757),
-                  onPressed: () {},
+                  onPressed: () {
+                    _createPrivate();
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10.0),

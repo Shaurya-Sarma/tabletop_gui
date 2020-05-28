@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:tabletop_gui/screens/board/board.dart';
 
 import 'package:tabletop_gui/screens/welcome/welcome.dart';
 import 'package:tabletop_gui/screens/login/login.dart';
@@ -20,4 +21,5 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/social": (BuildContext context) => SocialScreen(),
   "/settings": (BuildContext context) => SettingsScreen(),
   "/lobby": (BuildContext context) => LobbyScreen(),
+  "/board": (BuildContext context) => BoardScreen(gameCode: null),
 };
