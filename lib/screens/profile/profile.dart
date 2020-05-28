@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -6,8 +8,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  Future<DocumentSnapshot> getUserData() async {
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    Future<DocumentSnapshot> data =
+        Firestore.instance.collection("users").document(firebaseUser.uid).get();
+
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+        future: getUserData(), builder: builder);
+  }
+
+  Widget builder(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: Text('Please wait its loading...'));
+    }
+
     return Container(
         alignment: Alignment.center,
         child: Column(
@@ -23,18 +43,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           fontSize: 40.0),
                       children: <TextSpan>[
                         TextSpan(
-                          text: "Username",
+                          text: "${snapshot.data['displayName']}",
                           style: TextStyle(color: Color(0xff2F80ED)),
                         ),
                       ]),
                 )),
             Padding(
-                padding: EdgeInsets.only(top: 35.0),
-                child: Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                  size: 250.0,
-                )),
+              padding: EdgeInsets.only(top: 35.0),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(snapshot.data['photoUrl']),
+                radius: 100,
+              ),
+            ),
             Padding(
                 padding: EdgeInsets.only(top: 30.0),
                 child: Row(

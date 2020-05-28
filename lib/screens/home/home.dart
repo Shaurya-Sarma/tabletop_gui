@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  String userInfo = "Username";
 
   static List<Widget> _widgetOptions = <Widget>[
     ProfileScreen(),

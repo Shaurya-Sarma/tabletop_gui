@@ -27,6 +27,8 @@ dependencies:
   firebase_auth: ^0.16.0
   google_sign_in: ^4.5.1
   url_launcher: ^5.4.10
+  firebase_database: ^3.1.6
+  cloud_firestore: ^0.13.6
 
   flutter:
     sdk: flutter
@@ -53,6 +55,7 @@ flutter:
   assets:
     - assets/images/download.jpg
     - assets/images/twenty-nine.jpg
+    - assets/images/Felt.png
       # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

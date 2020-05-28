@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/gestures.dart';
+import 'package:tabletop_gui/screens/board/board.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LobbyScreen extends StatefulWidget {
@@ -71,7 +72,12 @@ class _LobbyScreenState extends State<LobbyScreen> {
                         style: TextStyle(color: Colors.white, fontSize: 18.0),
                       ),
                       color: Color(0xff00B16A),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => BoardScreen()));
+                      },
                     )),
                 Padding(
                   padding: EdgeInsets.only(bottom: 30.0),
