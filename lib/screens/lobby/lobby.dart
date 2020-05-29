@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter/gestures.dart';
-import 'package:tabletop_gui/screens/board/board.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
+import 'package:tabletop_gui/screens/board/board.dart';
+
+import 'package:uuid/uuid.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LobbyScreen extends StatefulWidget {
   @override
@@ -12,7 +15,7 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
-  _launchURL() async {
+  void _launchURL() async {
     const url = 'https://gamerules.com/rules/twenty-nine-card-game/';
     if (await canLaunch(url)) {
       await launch(url);
@@ -21,16 +24,18 @@ class _LobbyScreenState extends State<LobbyScreen> {
     }
   }
 
-  _createPrivate() {
-    String gameCode = 'oMa-2dk';
+  void _createPrivate() async {
+    String gameCode = UniqueKey().toString();
 
+    final FirebaseUser currentUser = await FirebaseAuth.instance.currentUser();
     Firestore.instance.collection("games").add({
-      'id': '$gameCode',
+      'uuid': '$gameCode',
       'type': 'twenty-nine',
-      'players': [],
+      'players': ['${currentUser.uid}'],
       'game': {
         'score': 0,
-        'teams': ["", ""],
+        'teamOne': ["", ""],
+        'teamTwo': ["", ""],
       }
     });
 
@@ -38,6 +43,62 @@ class _LobbyScreenState extends State<LobbyScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => BoardScreen(gameCode: gameCode)));
+  }
+
+  void _joinPrivate() async {
+    QuerySnapshot gameInstance = await Firestore.instance
+        .collection("games")
+        .where("uuid", isEqualTo: "${_textFieldController.text}")
+        .getDocuments();
+
+    gameInstance.documents.forEach((doc) async {
+      DocumentSnapshot document = await doc.reference.get();
+      List<dynamic> players = document.data['players'];
+      final FirebaseUser currentUser =
+          await FirebaseAuth.instance.currentUser();
+      players.add('${currentUser.uid}');
+      doc.reference.updateData({
+        'players': players,
+      });
+    });
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                BoardScreen(gameCode: _textFieldController.text)));
+  }
+
+  TextEditingController _textFieldController = TextEditingController();
+
+  void _openDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Join Private Game'),
+          content: TextField(
+            controller: _textFieldController,
+            decoration: InputDecoration(hintText: "Enter A Game Code"),
+            keyboardType: TextInputType.text,
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('CANCEL', style: TextStyle(color: Colors.redAccent)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Text('JOIN', style: TextStyle(color: Colors.green)),
+              onPressed: () {
+                _joinPrivate();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -120,7 +181,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
                       style: TextStyle(color: Colors.white, fontSize: 18.0),
                     ),
                     color: Color(0xff2F80ED),
-                    onPressed: () {},
+                    onPressed: () {
+                      _openDialog();
+                    },
                   ),
                 ),
                 Padding(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -32,8 +34,36 @@ class _BoardScreenState extends State<BoardScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.close),
+                      color: Colors.white,
+                      iconSize: 36.0,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        SystemChrome.setPreferredOrientations([
+                          DeviceOrientation.portraitUp,
+                          DeviceOrientation.portraitDown,
+                        ]);
+
+                        QuerySnapshot gameInstance = await Firestore.instance
+                            .collection("games")
+                            .where("uuid", isEqualTo: "$gameCode")
+                            .getDocuments();
+
+                        gameInstance.documents.forEach((doc) async {
+                          DocumentSnapshot document = await doc.reference.get();
+                          List<dynamic> players = document.data['players'];
+                          final FirebaseUser currentUser =
+                              await FirebaseAuth.instance.currentUser();
+                          players.remove(currentUser.uid);
+                          doc.reference.updateData({
+                            'players': players,
+                          });
+                        });
+                      },
+                    ),
                     OutlineButton(
                       child: Text("JOIN CODE",
                           style: TextStyle(color: Colors.white)),
@@ -87,10 +117,10 @@ class _BoardScreenState extends State<BoardScreen> {
 
   void _openDialog() {
     showDialog(
-      context: context, barrierDismissible: false, // user must tap button!
-
+      context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return new AlertDialog(
+        return AlertDialog(
           title: Text('ROOM INVITE CODE'),
           content: SingleChildScrollView(
             child: ListBody(
