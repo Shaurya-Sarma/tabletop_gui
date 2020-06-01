@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:tabletop_gui/screens/login/login.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tabletop_gui/src/screens/login.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override

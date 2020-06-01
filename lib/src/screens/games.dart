@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tabletop_gui/screens/lobby/lobby.dart';
+import 'package:tabletop_gui/src/screens/lobby.dart';
 
 class GamesScreen extends StatelessWidget {
   @override

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:tabletop_gui/screens/profile/profile.dart';
-import 'package:tabletop_gui/screens/games/games.dart';
-import 'package:tabletop_gui/screens/social/social.dart';
-import 'package:tabletop_gui/screens/user_settings/user_settings.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tabletop_gui/src/models/user.dart';
+import 'package:tabletop_gui/src/screens/games.dart';
+import 'package:tabletop_gui/src/screens/profile.dart';
+import 'package:tabletop_gui/src/screens/social.dart';
+import 'package:tabletop_gui/src/screens/user_settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key key, @required this.user}) : super(key: key);
-  final FirebaseUser user;
+  final User user;
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
