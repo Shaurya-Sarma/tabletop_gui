@@ -9,7 +9,6 @@ class LoginBlocProvider extends InheritedWidget {
   bool updateShouldNotify(_) => true;
 
   static LoginBloc of(BuildContext context) {
-    print(context.inheritFromWidgetOfExactType(LoginBlocProvider));
     return (context.inheritFromWidgetOfExactType(LoginBlocProvider)
             as LoginBlocProvider)
         .bloc;

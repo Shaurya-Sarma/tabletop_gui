@@ -21,4 +21,6 @@ class StringConstant {
       "Error! No User Found. Please try again.";
   static const String registerErrorMessage =
       "Cannot Create The User. Please try again.";
+
+  static const String twentyNineTitle = "Twenty-Nine";
 }

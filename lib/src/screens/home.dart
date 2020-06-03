@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:tabletop_gui/src/models/user.dart';
+import 'package:tabletop_gui/src/screens/widgets/logo.dart';
+
 import 'package:tabletop_gui/src/screens/games.dart';
 import 'package:tabletop_gui/src/screens/profile.dart';
 import 'package:tabletop_gui/src/screens/social.dart';
 import 'package:tabletop_gui/src/screens/user_settings.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key key, @required this.user}) : super(key: key);
   final User user;
+  const HomeScreen({Key key, @required this.user}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -17,12 +19,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    ProfileScreen(),
-    GamesScreen(),
-    SocialScreen(),
-    SettingsScreen(),
-  ];
+  List<Widget> _children() => <Widget>[
+        ProfileScreen(user: widget.user),
+        GamesScreen(),
+        SocialScreen(),
+        SettingsScreen(),
+      ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,34 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> children = _children();
+
     return Scaffold(
       body: Padding(
           padding: EdgeInsets.only(top: 40.0),
           child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  new Spacer(),
-                  Padding(
-                      padding: EdgeInsets.only(left: 40.0),
-                      child: Text(
-                        "TABLETOP",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 30.0),
-                      )),
-                  new Spacer(),
-                  Padding(
-                      padding: EdgeInsets.only(right: 15.0),
-                      child: Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                      ))
-                ],
-              ),
-              _widgetOptions.elementAt(_selectedIndex)
-            ],
+            children: <Widget>[appHeader(), children[_selectedIndex]],
           )),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -77,6 +58,22 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  Widget appHeader() {
+    return Row(
+      children: <Widget>[
+        Spacer(),
+        Padding(padding: EdgeInsets.only(left: 40.0), child: TabletopLogo()),
+        Spacer(),
+        Padding(
+            padding: EdgeInsets.only(right: 15.0),
+            child: Icon(
+              Icons.notifications,
+              color: Colors.white,
+            ))
+      ],
     );
   }
 }

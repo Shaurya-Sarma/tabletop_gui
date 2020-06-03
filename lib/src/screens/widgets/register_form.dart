@@ -112,18 +112,13 @@ class _RegisterFormState extends State<RegisterForm> {
       ),
       onPressed: () {
         if (_bloc.validateFields()) {
-          registerUser();
+          _bloc.registerWithEmail();
+          Navigator.pushNamed(context, '/login');
         } else {
           showErrorMessage();
         }
       },
     );
-  }
-
-  void registerUser() {
-    _bloc
-        .registerWithEmail()
-        .then((value) => Navigator.pushNamed(context, '/login'));
   }
 
   void showErrorMessage() {

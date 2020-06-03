@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'package:tabletop_gui/src/models/user.dart';
+import 'package:tabletop_gui/src/blocs/base_bloc.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 
-import '../resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginBloc {
-  final _repository = Repository();
+class LoginBloc extends BaseBloc {
   final _email = BehaviorSubject<String>();
   final _username = BehaviorSubject<String>();
   final _password = BehaviorSubject<String>();
@@ -74,21 +72,21 @@ class LoginBloc {
     }
   }
 
-  Future<User> loginWithEmail() {
-    return _repository.loginWithEmail(_email.value, _password.value);
+  void loginWithEmail() {
+    repository.loginWithEmail(_email.value, _password.value);
   }
 
-  Future<User> loginWithGoogle() {
-    return _repository.loginWithGoogle();
+  void loginWithGoogle() {
+    repository.loginWithGoogle();
   }
 
-  Future<void> registerWithEmail() {
-    return _repository.registerWithEmail(
+  void registerWithEmail() {
+    repository.registerWithEmail(
         _email.value, _password.value, _username.value);
   }
 
-  Future<void> sendPasswordResetEmail() {
-    return _repository.sendPasswordResetEmail(_email.value);
+  void sendPasswordResetEmail() {
+    repository.sendPasswordResetEmail(_email.value);
   }
 
   void dispose() async {

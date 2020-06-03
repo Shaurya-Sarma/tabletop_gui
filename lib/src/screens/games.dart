@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tabletop_gui/src/screens/lobby.dart';
+import 'package:tabletop_gui/src/utils/strings.dart';
 
 class GamesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => LobbyScreen()));
-      },
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        twentyNine(context),
+      ],
+    );
+  }
+
+  Widget twentyNine(BuildContext context) {
+    return GestureDetector(
       child: Card(
         color: Color(0xff212049),
         margin: EdgeInsets.all(40.0),
@@ -25,7 +29,7 @@ class GamesScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text(
-                    "Twenty-Nine",
+                    StringConstant.twentyNineTitle,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -54,6 +58,9 @@ class GamesScreen extends StatelessWidget {
           ],
         ),
       ),
-    ));
+      onTap: () {
+        Navigator.pushNamed(context, "/lobby");
+      },
+    );
   }
 }

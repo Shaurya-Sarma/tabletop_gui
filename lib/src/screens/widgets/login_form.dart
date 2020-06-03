@@ -19,6 +19,10 @@ class _LoginFormState extends State<LoginForm> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = LoginBlocProvider.of(context);
+    _bloc.currentUser().listen((event) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => HomeScreen(user: event)));
+    });
   }
 
   @override
@@ -122,8 +126,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void loginUser() {
-    _bloc.loginWithEmail().then((value) => Navigator.push(context,
-        MaterialPageRoute(builder: (context) => HomeScreen(user: value))));
+    _bloc.loginWithEmail();
   }
 
   Widget connectWithDivider() {
@@ -156,8 +159,7 @@ class _LoginFormState extends State<LoginForm> {
     return SignInButton(
       Buttons.GoogleDark,
       onPressed: () {
-        _bloc.loginWithGoogle().then((value) => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomeScreen(user: value))));
+        _bloc.loginWithGoogle();
       },
     );
   }
