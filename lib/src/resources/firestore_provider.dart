@@ -10,6 +10,8 @@ class FirestoreProvider {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final _currentUser = BehaviorSubject<User>();
 
+  Stream<User> get currentUser => _currentUser.stream;
+
   // User Login With Email & Password
   void loginWithEmail(String email, String password) async {
     try {
@@ -82,22 +84,22 @@ class FirestoreProvider {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
-  Stream<User> get currentUser => _currentUser.stream;
-
-  void createPrivateGame(
+  String createPrivateGame(
     String lobbyCode,
     String gameType,
   ) {
     _firestore.collection("games").add({
       'uuid': '$lobbyCode',
       'type': '$gameType',
-      'players': ['${_currentUser.value}'],
+      'players': [_currentUser.value.toJson()],
       'game': {
         'score': 0,
         'teamOne': ["", ""],
         'teamTwo': ["", ""],
       }
     });
+
+    return lobbyCode;
   }
 
   void joinPrivateGame(String userJoinCode) async {
@@ -110,13 +112,38 @@ class FirestoreProvider {
       DocumentSnapshot document = await doc.reference.get();
       List<dynamic> players = document.data['players'];
 
-      final FirebaseUser currentUser = await _auth.currentUser();
-
-      players.add('${currentUser.uid}');
+      players.add(_currentUser.value);
       doc.reference.updateData({
         'players': players,
       });
     });
+  }
+
+  void exitGame(String gameCode) async {
+    QuerySnapshot gameInstance = await Firestore.instance
+        .collection("games")
+        .where("uuid", isEqualTo: "$gameCode")
+        .getDocuments();
+
+    gameInstance.documents.forEach((doc) async {
+      DocumentSnapshot document = await doc.reference.get();
+      List<dynamic> players = document.data['players'];
+      players.remove(_currentUser.value);
+      doc.reference.updateData({
+        'players': players,
+      });
+    });
+  }
+
+  Future<Map<String, dynamic>> findGameData(String gameCode) async {
+    QuerySnapshot gameInstance = await Firestore.instance
+        .collection("games")
+        .where("uuid", isEqualTo: "$gameCode")
+        .getDocuments();
+
+    Map<String, dynamic> gameData = gameInstance.documents.first.data;
+
+    return gameData;
   }
 
   void dispose() async {

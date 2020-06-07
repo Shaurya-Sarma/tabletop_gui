@@ -12,8 +12,8 @@ class TwentyNineLobbyBloc extends BaseBloc {
 
   Function(String) get changeUserJoinCode => _userJoinCode.sink.add;
 
-  void createPrivateGame() async {
-    repository.createPrivateGame(UniqueKey().toString(), "twenty-nine");
+  Future<String> createPrivateGame() async {
+    return repository.createPrivateGame(UniqueKey().toString(), "twenty-nine");
   }
 
   void joinPrivateGame() async {

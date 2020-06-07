@@ -1,6 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc_provider.dart';
 
 import 'package:tabletop_gui/src/screens/games.dart';
 import 'package:tabletop_gui/src/screens/home.dart';
@@ -19,6 +17,7 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/register": (BuildContext context) => RegisterScreen(),
   "/home": (BuildContext context) => HomeScreen(user: null),
   "/profile": (BuildContext context) => ProfileScreen(user: null),
+  "/games": (BuildContext context) => GamesScreen(),
   "/friends": (BuildContext context) => SocialScreen(),
   "/settiings": (BuildContext context) => SettingsScreen(),
   "/lobby": (BuildContext context) => LobbyScreen(),

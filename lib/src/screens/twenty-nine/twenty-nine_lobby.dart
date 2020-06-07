@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
+import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc.dart';
 
 import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc_provider.dart';
@@ -125,13 +126,13 @@ class _LobbyScreenState extends State<LobbyScreen> {
       ),
       color: Color(0xffEB5757),
       onPressed: () {
-        _bloc.createPrivateGame();
-        _bloc.userJoinCode.listen((event) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => BoardScreen(gameCode: event)));
-        });
+        _bloc.createPrivateGame().then((value) =>
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return TwentyNineBoardBlocProvider(
+                  child: BoardScreen(
+                gameCode: value,
+              ));
+            })));
       },
     );
   }
@@ -172,11 +173,13 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   onPressed: () {
                     _bloc.joinPrivateGame();
                     _bloc.userJoinCode.listen((event) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  BoardScreen(gameCode: event)));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return TwentyNineBoardBlocProvider(
+                            child: BoardScreen(
+                          gameCode: event,
+                        ));
+                      }));
                     });
                   },
                 )

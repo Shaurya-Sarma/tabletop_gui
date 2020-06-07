@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc.dart';
+import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc_provider.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -14,7 +14,22 @@ class BoardScreen extends StatefulWidget {
 
 class _BoardScreenState extends State<BoardScreen> {
   String gameCode;
+  
   _BoardScreenState(this.gameCode);
+
+  TwentyNineBoardBloc _bloc;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _bloc = TwentyNineBoardBlocProvider.of(context);
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +38,7 @@ class _BoardScreenState extends State<BoardScreen> {
 
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage('assets/images/Felt.png'),
-            fit: BoxFit.cover,
-          )),
+          decoration: backgroundImage(),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.0),
             child: Column(
@@ -36,117 +47,130 @@ class _BoardScreenState extends State<BoardScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      color: Colors.white,
-                      iconSize: 36.0,
-                      onPressed: () async {
-                        Navigator.pop(context);
-                        SystemChrome.setPreferredOrientations([
-                          DeviceOrientation.portraitUp,
-                          DeviceOrientation.portraitDown,
-                        ]);
-
-                        QuerySnapshot gameInstance = await Firestore.instance
-                            .collection("games")
-                            .where("uuid", isEqualTo: "$gameCode")
-                            .getDocuments();
-
-                        gameInstance.documents.forEach((doc) async {
-                          DocumentSnapshot document = await doc.reference.get();
-                          List<dynamic> players = document.data['players'];
-                          final FirebaseUser currentUser =
-                              await FirebaseAuth.instance.currentUser();
-                          players.remove(currentUser.uid);
-                          doc.reference.updateData({
-                            'players': players,
-                          });
-                        });
-                      },
-                    ),
-                    OutlineButton(
-                      child: Text("JOIN CODE",
-                          style: TextStyle(color: Colors.white)),
-                      borderSide: BorderSide(color: Colors.white),
-                      onPressed: () {
-                        _openDialog();
-                      },
-                    ),
+                    backArrow(),
+                    joinCodeButton(),
                   ],
                 ),
-                IconButton(
-                  icon: Icon(Icons.account_circle),
-                  color: Colors.white,
-                  iconSize: 60.0,
-                  onPressed: () {},
-                ),
+                playerThree(),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 50.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.account_circle),
-                        color: Colors.white,
-                        iconSize: 60.0,
-                        onPressed: () {
-                          // FirebaseDatabase.instance.reference().child("users");
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.account_circle),
-                        color: Colors.white,
-                        iconSize: 60.0,
-                        onPressed: () {
-                          // FirebaseDatabase.instance.reference().child("users");
-                        },
-                      ),
+                      playerTwo(),
+                      playerFour(),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                  size: 60.0,
-                )
+                playerOne(),
               ],
             ),
           )),
     );
   }
 
-  void _openDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('ROOM INVITE CODE'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                Text('Invite your friends to the game by sharing this code!'),
-                Container(
-                    padding: EdgeInsets.only(top: 40.0),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '$gameCode',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 36.0),
-                    )),
+  BoxDecoration backgroundImage() {
+    return BoxDecoration(
+        image: DecorationImage(
+      image: AssetImage('assets/images/Felt.png'),
+      fit: BoxFit.cover,
+    ));
+  }
+
+  Widget backArrow() {
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios),
+      color: Colors.white,
+      iconSize: 36.0,
+      onPressed: () async {
+        _bloc.exitGame(gameCode);
+        Navigator.pop(context);
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
+      },
+    );
+  }
+
+  Widget joinCodeButton() {
+    return OutlineButton(
+      child: Text("JOIN CODE", style: TextStyle(color: Colors.white)),
+      borderSide: BorderSide(color: Colors.white),
+      onPressed: () {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('ROOM INVITE CODE'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: [
+                    Text(
+                        'Invite your friends to the game by sharing this code!'),
+                    Container(
+                        padding: EdgeInsets.only(top: 40.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '$gameCode',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 36.0),
+                        )),
+                  ],
+                ),
+              ),
+              actions: [
+                new FlatButton(
+                  child: new Text('CLOSE'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ],
-            ),
-          ),
-          actions: [
-            new FlatButton(
-              child: new Text('CLOSE'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+            );
+          },
         );
       },
+    );
+  }
+
+  Widget playerOne() {
+    return CircleAvatar(
+      backgroundImage: NetworkImage('${_bloc.findGameData(gameCode).}'),
+      radius: 30,
+    );
+  }
+
+  Widget playerTwo() {
+    return IconButton(
+      icon: Icon(Icons.account_circle),
+      color: Colors.white,
+      iconSize: 60.0,
+      onPressed: () {
+        _bloc
+            .findGameData(gameCode)
+            .then((value) => print('${value["players"][0]}'));
+      },
+    );
+  }
+
+  Widget playerThree() {
+    return IconButton(
+      icon: Icon(Icons.account_circle),
+      color: Colors.white,
+      iconSize: 60.0,
+      onPressed: () {
+      },
+    );
+  }
+
+  Widget playerFour() {
+    return IconButton(
+      icon: Icon(Icons.account_circle),
+      color: Colors.white,
+      iconSize: 60.0,
+      onPressed: () {},
     );
   }
 }

@@ -16,4 +16,14 @@ class User {
   String get email => _email;
   List<User> get friends => _friends;
   String get photoUrl => _photoUrl;
+
+  Map toJson() {
+    return {
+      "uid": _uid,
+      "displayName": _displayName,
+      "email": _email,
+      "photoUrl": _photoUrl,
+      "friends": _friends,
+    };
+  }
 }

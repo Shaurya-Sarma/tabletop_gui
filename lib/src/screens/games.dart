@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc_provider.dart';
+import 'package:tabletop_gui/src/screens/twenty-nine/twenty-nine_lobby.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 
 class GamesScreen extends StatelessWidget {
@@ -59,7 +61,9 @@ class GamesScreen extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Navigator.pushNamed(context, "/lobby");
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return TwentyNineLobbyBlocProvider(child: LobbyScreen());
+        }));
       },
     );
   }

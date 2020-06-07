@@ -23,11 +23,19 @@ class Repository {
     return _firestoreProvider.currentUser;
   }
 
-  void createPrivateGame(String lobbyCode, String gameType) {
+  String createPrivateGame(String lobbyCode, String gameType) {
     return _firestoreProvider.createPrivateGame(lobbyCode, gameType);
   }
 
   void joinPrivateGame(String userJoinCode) {
-    return _firestoreProvider.joinPrivateGame(userJoinCode);
+    _firestoreProvider.joinPrivateGame(userJoinCode);
+  }
+
+  void exitGame(String gameCode) {
+    _firestoreProvider.exitGame(gameCode);
+  }
+
+  dynamic findGameData(String gameCode) {
+    return _firestoreProvider.findGameData(gameCode);
   }
 }
