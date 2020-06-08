@@ -38,9 +38,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: Padding(
-          padding: EdgeInsets.only(top: 40.0),
-          child: Column(
-            children: <Widget>[appHeader(), children[_selectedIndex]],
+          padding: EdgeInsets.only(top: 30.0),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(bottom: 20.0),
+                  alignment: Alignment.center,
+                  child: TabletopLogo()),
+              children[_selectedIndex]
+            ],
           )),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -58,22 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
-    );
-  }
-
-  Widget appHeader() {
-    return Row(
-      children: <Widget>[
-        Spacer(),
-        Padding(padding: EdgeInsets.only(left: 40.0), child: TabletopLogo()),
-        Spacer(),
-        Padding(
-            padding: EdgeInsets.only(right: 15.0),
-            child: Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ))
-      ],
     );
   }
 }

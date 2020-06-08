@@ -14,7 +14,7 @@ class BoardScreen extends StatefulWidget {
 
 class _BoardScreenState extends State<BoardScreen> {
   String gameCode;
-  
+
   _BoardScreenState(this.gameCode);
 
   TwentyNineBoardBloc _bloc;
@@ -137,7 +137,7 @@ class _BoardScreenState extends State<BoardScreen> {
 
   Widget playerOne() {
     return CircleAvatar(
-      backgroundImage: NetworkImage('${_bloc.findGameData(gameCode).}'),
+      backgroundImage: NetworkImage('${_bloc.findGameData(gameCode)}'),
       radius: 30,
     );
   }
@@ -160,8 +160,7 @@ class _BoardScreenState extends State<BoardScreen> {
       icon: Icon(Icons.account_circle),
       color: Colors.white,
       iconSize: 60.0,
-      onPressed: () {
-      },
+      onPressed: () {},
     );
   }
 
