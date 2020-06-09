@@ -77,7 +77,7 @@ class GamesScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              child: Image.asset("assets/images/twenty-nine.jpg"),
+              child: Image.asset("assets/images/snake_game_thumbnail.png"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,

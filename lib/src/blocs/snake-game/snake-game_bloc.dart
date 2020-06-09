@@ -1,15 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:tabletop_gui/src/utils/audio_manager.dart';
 
 class SnakeGameBloc {
   static int numOfTiles = 405;
   static int tilesPerRow = 15;
 
   static Random randomPos = Random();
-  int foodPos = randomPos.nextInt(numOfTiles);
+  int foodPos =
+      randomPos.nextInt(numOfTiles - tilesPerRow); //! NEEDS TO FIX EXTRA ROW
   void generateFruitPos() {
-    foodPos = randomPos.nextInt(numOfTiles);
+    foodPos = randomPos.nextInt(numOfTiles - tilesPerRow);
   }
 
   // static int snakeStartingPoint =
@@ -59,6 +61,7 @@ class SnakeGameBloc {
 
     if (snakeCellPos.last == foodPos) {
       generateFruitPos();
+      AudioManager.playSound("pickup_fruit.mp3", 1.2);
     } else {
       snakeCellPos.removeAt(0);
     }
@@ -88,6 +91,7 @@ class SnakeGameBloc {
           counter += 1;
         }
         if (counter == 2) {
+          AudioManager.playSound("snake_death.mp3", 1.3);
           return true;
         }
       }

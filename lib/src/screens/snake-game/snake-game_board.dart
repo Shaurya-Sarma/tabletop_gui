@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:tabletop_gui/src/blocs/snake-game/snake-game_bloc.dart';
 import 'package:tabletop_gui/src/blocs/snake-game/snake-game_bloc_provider.dart';
+import 'package:tabletop_gui/src/utils/audio_manager.dart';
 
 class SnakeGameBoard extends StatefulWidget {
   @override
@@ -27,11 +28,13 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
   bool isGameActive = false;
 
   void gameManager() {
+    AudioManager.playLoop("snake_music.mp3", 0.8);
     _bloc.snakeCellPos = [197, 198, 199, 200];
     isGameActive = true;
     Timer.periodic(_bloc.tickSpeed, (timer) {
       updateSnakePos();
       if (_bloc.isGameOver()) {
+        AudioManager.stopFile();
         isGameActive = false;
         timer.cancel();
         _showEndDialog();
@@ -66,28 +69,24 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: SnakeGameBloc.tilesPerRow),
                   itemBuilder: (BuildContext context, int index) {
-                    if (_bloc.snakeCellPos.contains(index)) {
-                      return ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Container(
-                            color: Colors.blue,
-                          ));
-                    } else if (_bloc.foodPos == index) {
-                      return ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Container(
-                            color: Colors.red,
-                          ));
-                    } else if (index % 2 == 0) {
+                    if (index % 2 == 0) {
                       return ClipRect(
-                        child: Container(
-                          color: Colors.green,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(color: Colors.green),
+                            addFruit(index),
+                            addSnake(index),
+                          ],
                         ),
                       );
                     } else {
                       return ClipRect(
-                        child: Container(
-                          color: Colors.green[400],
+                        child: Stack(
+                          children: <Widget>[
+                            Container(color: Colors.green[400]),
+                            addFruit(index),
+                            addSnake(index),
+                          ],
                         ),
                       );
                     }
@@ -106,12 +105,13 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
                       style: TextStyle(color: Colors.white),
                     ),
                     onPressed: () {
-                      isGameActive ? null : gameManager();
+                      if (!isGameActive) gameManager();
                     }),
                 RaisedButton(
                     color: Colors.redAccent,
                     child: Text("EXIT", style: TextStyle(color: Colors.white)),
                     onPressed: () {
+                      AudioManager.stopFile();
                       Navigator.of(context).pop();
                     })
               ],
@@ -140,5 +140,40 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
         );
       },
     );
+  }
+
+  Widget addFruit(int index) {
+    if (_bloc.foodPos == index) {
+      return Image(
+        image: AssetImage("assets/images/apple_sprite.png"),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget addSnake(int index) {
+    // if (_bloc.snakeCellPos.last == index) {
+    //   return ClipRRect(
+    //       borderRadius:
+    //           BorderRadius.horizontal(right: Radius.elliptical(20.0, 20.0)),
+    //       child: Container(
+    //         color: Colors.blue,
+    //       ));
+    // } else if (_bloc.snakeCellPos.first == index) {
+    //   return ClipRRect(
+    //       borderRadius:
+    //           BorderRadius.horizontal(left: Radius.elliptical(20.0, 20.0)),
+    //       child: Container(
+    //         color: Colors.blue,
+    //       ));}
+    if (_bloc.snakeCellPos.contains(index)) {
+      return ClipRRect(
+          child: Container(
+        color: Colors.blue,
+      ));
+    } else {
+      return Container();
+    }
   }
 }
