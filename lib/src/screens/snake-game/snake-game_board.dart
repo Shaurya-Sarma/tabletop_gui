@@ -160,18 +160,94 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
     //       child: Container(
     //         color: Colors.blue,
     //       ));
-    // } else if (_bloc.snakeCellPos.first == index) {
-    //   return ClipRRect(
-    //       borderRadius:
-    //           BorderRadius.horizontal(left: Radius.elliptical(20.0, 20.0)),
-    //       child: Container(
-    //         color: Colors.blue,
-    //       ));}
-    if (_bloc.snakeCellPos.contains(index)) {
-      return ClipRRect(
-          child: Container(
-        color: Colors.blue,
-      ));
+    if (_bloc.snakeCellPos.last == index) {
+      switch (_bloc.snakeDirection) {
+        case "down":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-head-down.png"),
+          );
+          break;
+
+        case "up":
+          return Image(
+            image: AssetImage("assets/images/snake_sprites/snake-head-up.png"),
+          );
+          break;
+
+        case "right":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-head-right.png"),
+          );
+          break;
+
+        case "left":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-head-left.png"),
+          );
+          break;
+      }
+    } else if (_bloc.snakeCellPos.first == index) {
+      switch (_bloc.snakeDirection) {
+        case "down":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-tail-down.png"),
+          );
+          break;
+
+        case "up":
+          return Image(
+            image: AssetImage("assets/images/snake_sprites/snake-tail-up.png"),
+          );
+          break;
+
+        case "right":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-tail-right.png"),
+          );
+          break;
+
+        case "left":
+          return Image(
+            image:
+                AssetImage("assets/images/snake_sprites/snake-tail-left.png"),
+          );
+          break;
+      }
+    } else if (_bloc.snakeCellPos.contains(index)) {
+      switch (_bloc.snakeDirection) {
+        case "down":
+          return Image(
+            image: AssetImage(
+                "assets/images/snake_sprites/snake-body-vertical.png"),
+          );
+          break;
+
+        case "up":
+          return Image(
+            image: AssetImage(
+                "assets/images/snake_sprites/snake-body-vertical.png"),
+          );
+          break;
+
+        case "right":
+          return Image(
+            image: AssetImage(
+                "assets/images/snake_sprites/snake-body-horizontal.png"),
+          );
+          break;
+
+        case "left":
+          return Image(
+            image: AssetImage(
+                "assets/images/snake_sprites/snake-body-horizontal.png"),
+          );
+          break;
+      }
     } else {
       return Container();
     }

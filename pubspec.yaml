@@ -59,10 +59,26 @@ flutter:
     - assets/images/twenty-nine.jpg
     - assets/images/Felt.png
     - assets/images/snake_game_thumbnail.png
+
     - assets/images/apple_sprite.png
     - assets/audio/pickup_fruit.mp3
     - assets/audio/snake_death.mp3
     - assets/audio/snake_music.mp3
+
+    - assets/images/snake_sprites/snake-tail-right.png
+    - assets/images/snake_sprites/snake-tail-left.png
+    - assets/images/snake_sprites/snake-tail-down.png
+    - assets/images/snake_sprites/snake-tail-up.png
+    - assets/images/snake_sprites/snake-head-right.png
+    - assets/images/snake_sprites/snake-head-left.png
+    - assets/images/snake_sprites/snake-head-down.png
+    - assets/images/snake_sprites/snake-head-up.png
+    - assets/images/snake_sprites/snake-body-horizontal.png
+    - assets/images/snake_sprites/snake-body-vertical.png
+    - assets/images/snake_sprites/snake-corner-ld.png
+    - assets/images/snake_sprites/snake-corner-lu.png
+    - assets/images/snake_sprites/snake-corner-rd.png
+    - assets/images/snake_sprites/snake-corner-ru.png
       # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

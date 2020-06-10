@@ -15,11 +15,13 @@ class AudioManager {
 
   static void playLoop(String fileName, double volume) async {
     player = await cache.loop(fileName, volume: volume);
+    print("local $player");
   }
 
-  static void stopFile() {
-    print("GOING TO STOP MUSIC");
-    cache.clear("snake_music.mp3");
+  static void stopFile() async {
+    print(player);
+    print(await player.stop());
+    await player.stop();
     print("STOPPED MUSIC");
   }
 }
