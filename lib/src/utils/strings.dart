@@ -22,6 +22,6 @@ class StringConstant {
   static const String registerErrorMessage =
       "Cannot Create The User. Please try again.";
 
-  static const String twentyNineTitle = "Twenty-Nine";
+  static const String warTitle = "War";
   static const String snakeGameTitle = "Snake Game";
 }

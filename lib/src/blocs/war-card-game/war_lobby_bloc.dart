@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tabletop_gui/src/blocs/base_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class TwentyNineLobbyBloc extends BaseBloc {
+class WarLobbyBloc extends BaseBloc {
   final _userJoinCode = BehaviorSubject<String>();
 
   Stream<String> get userJoinCode => _userJoinCode.stream;
@@ -16,8 +16,8 @@ class TwentyNineLobbyBloc extends BaseBloc {
     return repository.createPrivateGame(UniqueKey().toString(), "twenty-nine");
   }
 
-  void joinPrivateGame() async {
-    repository.joinPrivateGame(_userJoinCode.value);
+  Future<String> joinPrivateGame() async {
+    return repository.joinPrivateGame(_userJoinCode.value);
   }
 
   void launchURL() async {

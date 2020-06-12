@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tabletop_gui/src/blocs/snake-game/snake-game_bloc_provider.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc_provider.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_lobby_bloc_provider.dart';
 import 'package:tabletop_gui/src/screens/snake-game/snake-game_board.dart';
-import 'package:tabletop_gui/src/screens/twenty-nine/twenty-nine_lobby.dart';
+import 'package:tabletop_gui/src/screens/war-card-game/war_lobby.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 
 class GamesScreen extends StatelessWidget {
@@ -23,7 +23,7 @@ class GamesScreen extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              child: Image.asset("assets/images/twenty-nine.jpg"),
+              child: Image.asset("assets/images/war_thumbnail.jpg"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +31,7 @@ class GamesScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.all(15.0),
                   child: Text(
-                    StringConstant.twentyNineTitle,
+                    StringConstant.warTitle,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -62,7 +62,7 @@ class GamesScreen extends StatelessWidget {
       ),
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return TwentyNineLobbyBlocProvider(child: LobbyScreen());
+          return WarLobbyBlocProvider(child: LobbyScreen());
         }));
       },
     );

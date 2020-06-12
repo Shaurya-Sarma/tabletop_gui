@@ -1,3 +1,5 @@
+import 'package:tabletop_gui/src/models/game.dart';
+
 import 'firestore_provider.dart';
 import 'package:tabletop_gui/src/models/user.dart';
 
@@ -23,12 +25,16 @@ class Repository {
     return _firestoreProvider.currentUser;
   }
 
+  Stream<Game> currentGame() {
+    return _firestoreProvider.currentGame;
+  }
+
   String createPrivateGame(String lobbyCode, String gameType) {
     return _firestoreProvider.createPrivateGame(lobbyCode, gameType);
   }
 
-  void joinPrivateGame(String userJoinCode) {
-    _firestoreProvider.joinPrivateGame(userJoinCode);
+  Future<String> joinPrivateGame(String userJoinCode) {
+    return _firestoreProvider.joinPrivateGame(userJoinCode);
   }
 
   void exitGame(String gameCode) {

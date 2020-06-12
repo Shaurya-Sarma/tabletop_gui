@@ -37,17 +37,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Widget> children = _children();
 
     return Scaffold(
-      body: Padding(
-          padding: EdgeInsets.only(top: 30.0),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(bottom: 20.0),
-                  alignment: Alignment.center,
-                  child: TabletopLogo()),
-              children[_selectedIndex]
-            ],
-          )),
+      body: ListView(
+        children: <Widget>[
+          Container(alignment: Alignment.center, child: TabletopLogo()),
+          children[_selectedIndex]
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

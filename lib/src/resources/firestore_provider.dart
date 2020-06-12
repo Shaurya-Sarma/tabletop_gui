@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:tabletop_gui/src/models/game.dart';
 import 'package:tabletop_gui/src/models/user.dart';
 
 class FirestoreProvider {
@@ -9,8 +10,10 @@ class FirestoreProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final _currentUser = BehaviorSubject<User>();
+  final _currentGame = BehaviorSubject<Game>();
 
   Stream<User> get currentUser => _currentUser.stream;
+  Stream<Game> get currentGame => _currentGame.stream;
 
   // User Login With Email & Password
   void loginWithEmail(String email, String password) async {
@@ -89,40 +92,38 @@ class FirestoreProvider {
     String gameType,
   ) {
     _firestore.collection("games").add({
-      'uuid': '$lobbyCode',
+      'uid': '$lobbyCode',
       'type': '$gameType',
       'players': [_currentUser.value.toJson()],
-      'game': {
-        'score': 0,
-        'teamOne': ["", ""],
-        'teamTwo': ["", ""],
-      }
+      'game': {}
     });
 
     return lobbyCode;
   }
 
-  void joinPrivateGame(String userJoinCode) async {
+  Future<String> joinPrivateGame(String userJoinCode) async {
     QuerySnapshot gameInstance = await _firestore
         .collection("games")
-        .where("uuid", isEqualTo: "$userJoinCode")
+        .where("uid", isEqualTo: "$userJoinCode")
         .getDocuments();
 
     gameInstance.documents.forEach((doc) async {
       DocumentSnapshot document = await doc.reference.get();
       List<dynamic> players = document.data['players'];
 
-      players.add(_currentUser.value);
+      players.add(_currentUser.value.toJson());
       doc.reference.updateData({
         'players': players,
       });
     });
+
+    return userJoinCode;
   }
 
   void exitGame(String gameCode) async {
     QuerySnapshot gameInstance = await Firestore.instance
         .collection("games")
-        .where("uuid", isEqualTo: "$gameCode")
+        .where("uid", isEqualTo: "$gameCode")
         .getDocuments();
 
     gameInstance.documents.forEach((doc) async {
@@ -135,13 +136,20 @@ class FirestoreProvider {
     });
   }
 
-  Future<Map<String, dynamic>> findGameData(String gameCode) async {
+  findGameData(String gameCode) async {
     QuerySnapshot gameInstance = await Firestore.instance
         .collection("games")
-        .where("uuid", isEqualTo: "$gameCode")
+        .where("uid", isEqualTo: "$gameCode")
         .getDocuments();
 
     Map<String, dynamic> gameData = gameInstance.documents.first.data;
+
+    //print('players ${gameData["players"]}');
+    List<dynamic> players = gameData["players"];
+    //players.cast<User>().toList();
+
+    _currentGame.sink.add(
+        Game(gameData["type"], gameData["uid"], players, gameData["game"]));
 
     return gameData;
   }
@@ -149,5 +157,8 @@ class FirestoreProvider {
   void dispose() async {
     await _currentUser.drain();
     _currentUser.close();
+
+    await _currentGame.drain();
+    _currentGame.close();
   }
 }

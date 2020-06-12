@@ -14,7 +14,7 @@ class RegisterScreen extends StatelessWidget {
               child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: 90.0, bottom: 50.0),
+            padding: EdgeInsets.symmetric(vertical: 30.0),
             child: TabletopLogo(),
           ),
           Padding(

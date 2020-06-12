@@ -14,7 +14,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top: 70.0, bottom: 50.0),
+                padding: EdgeInsets.symmetric(vertical: 30.0),
                 alignment: Alignment.center, //? REMOVE
                 child: TabletopLogo(),
               ),

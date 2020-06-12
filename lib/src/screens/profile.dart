@@ -16,7 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Padding(padding: EdgeInsets.only(top: 70.0), child: userGreeting()),
+        Padding(padding: EdgeInsets.only(top: 30.0), child: userGreeting()),
         Padding(
           padding: EdgeInsets.only(top: 35.0),
           child: userProfileImage(),

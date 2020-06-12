@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc_provider.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
+import 'package:tabletop_gui/src/models/game.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -14,15 +15,15 @@ class BoardScreen extends StatefulWidget {
 
 class _BoardScreenState extends State<BoardScreen> {
   String gameCode;
-
   _BoardScreenState(this.gameCode);
 
-  TwentyNineBoardBloc _bloc;
+  WarBoardBloc _bloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = TwentyNineBoardBlocProvider.of(context);
+    _bloc = WarBoardBlocProvider.of(context);
+    _bloc.findGameData(gameCode);
   }
 
   @override
@@ -33,16 +34,13 @@ class _BoardScreenState extends State<BoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-
     return Scaffold(
       body: Container(
           decoration: backgroundImage(),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 40.0),
+            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,18 +49,8 @@ class _BoardScreenState extends State<BoardScreen> {
                     joinCodeButton(),
                   ],
                 ),
-                playerThree(),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 50.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      playerTwo(),
-                      playerFour(),
-                    ],
-                  ),
-                ),
                 playerOne(),
+                playerTwo(),
               ],
             ),
           )),
@@ -136,40 +124,44 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget playerOne() {
-    return CircleAvatar(
-      backgroundImage: NetworkImage('${_bloc.findGameData(gameCode)}'),
-      radius: 30,
-    );
-  }
-
-  Widget playerTwo() {
-    return IconButton(
-      icon: Icon(Icons.account_circle),
-      color: Colors.white,
-      iconSize: 60.0,
-      onPressed: () {
-        _bloc
-            .findGameData(gameCode)
-            .then((value) => print('${value["players"][0]}'));
+    return StreamBuilder(
+      stream: _bloc.currentGame(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          Game game = snapshot.data;
+          print('game received ${game.players[0]}');
+          return CircleAvatar(
+            backgroundImage: NetworkImage('${game.players[0]["photoUrl"]}'),
+            radius: 30,
+          );
+        } else {
+          return Icon(
+            Icons.account_circle,
+            color: Colors.white,
+          );
+        }
       },
     );
   }
 
-  Widget playerThree() {
-    return IconButton(
-      icon: Icon(Icons.account_circle),
-      color: Colors.white,
-      iconSize: 60.0,
-      onPressed: () {},
-    );
-  }
-
-  Widget playerFour() {
-    return IconButton(
-      icon: Icon(Icons.account_circle),
-      color: Colors.white,
-      iconSize: 60.0,
-      onPressed: () {},
+  Widget playerTwo() {
+    return StreamBuilder(
+      stream: _bloc.currentGame(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data.players.length == 2) {
+          Game game = snapshot.data;
+          print('game received ${game.players[1]}');
+          return CircleAvatar(
+            backgroundImage: NetworkImage('${game.players[1]["photoUrl"]}'),
+            radius: 30,
+          );
+        } else {
+          return Icon(
+            Icons.account_circle,
+            color: Colors.white,
+          );
+        }
+      },
     );
   }
 }

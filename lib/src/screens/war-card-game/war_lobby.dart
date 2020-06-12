@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_board_bloc_provider.dart';
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_lobby_bloc.dart';
+import 'package:tabletop_gui/src/blocs/war-card-game/war_lobby_bloc_provider.dart';
+import 'package:tabletop_gui/src/screens/war-card-game/war_board.dart';
 
-import 'package:tabletop_gui/src/blocs/twenty-nine/twenty-nine_lobby_bloc_provider.dart';
-import 'package:tabletop_gui/src/screens/twenty-nine/twenty-nine_board.dart';
 import 'package:tabletop_gui/src/screens/widgets/logo.dart';
 
 class LobbyScreen extends StatefulWidget {
@@ -14,12 +14,12 @@ class LobbyScreen extends StatefulWidget {
 }
 
 class _LobbyScreenState extends State<LobbyScreen> {
-  TwentyNineLobbyBloc _bloc;
+  WarLobbyBloc _bloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = TwentyNineLobbyBlocProvider.of(context);
+    _bloc = WarLobbyBlocProvider.of(context);
   }
 
   @override
@@ -32,35 +32,18 @@ class _LobbyScreenState extends State<LobbyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-            padding: EdgeInsets.fromLTRB(20.0, 40.0, 20.0, 0),
+            padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Padding(
-                    padding: EdgeInsets.only(bottom: 40.0), child: appHeader()),
-                appGameTitle(),
+                  padding: EdgeInsets.only(top: 25.0),
+                  child: appHeader(),
+                ),
+                createGameButton(),
                 Padding(
                   padding: EdgeInsets.only(bottom: 10.0),
-                  child: publicGameButton(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Text(
-                    "40 Players Currently Online",
-                    style: TextStyle(color: Colors.white, fontSize: 14.0),
-                  ),
-                ),
-                createPrivateGameButton(),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: joinPrivateGameButton(),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 200.0),
-                  child: Text(
-                    "19 Friends Currently Online",
-                    style: TextStyle(color: Colors.white, fontSize: 14.0),
-                  ),
+                  child: joinGameButton(),
                 ),
                 Center(
                   child: gameRulesLink(),
@@ -81,44 +64,41 @@ class _LobbyScreenState extends State<LobbyScreen> {
               Icons.arrow_back,
               color: Colors.white,
             )),
-        Container(child: TabletopLogo()),
-        Container(
-            child: Icon(
-          Icons.notifications,
-          color: Colors.white,
-        ))
+        Spacer(),
+        TabletopLogo(),
+        Spacer(),
       ],
     );
   }
 
-  Widget appGameTitle() {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Welcome To Twenty-Nine",
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          Padding(
-              padding: EdgeInsets.only(bottom: 20.0),
-              child: Divider(
-                thickness: 2,
-              )),
-        ]);
-  }
+  // Widget appGameTitle() {
+  //   return Column(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: <Widget>[
+  //         Text(
+  //           "Welcome To Twenty-Nine",
+  //           style: TextStyle(color: Colors.white, fontSize: 18.0),
+  //         ),
+  //         Padding(
+  //             padding: EdgeInsets.only(bottom: 20.0),
+  //             child: Divider(
+  //               thickness: 2,
+  //             )),
+  //       ]);
+  // }
 
-  Widget publicGameButton() {
-    return RaisedButton(
-      child: Text(
-        "Find Public Game",
-        style: TextStyle(color: Colors.white, fontSize: 18.0),
-      ),
-      color: Color(0xff00B16A),
-      onPressed: () {},
-    );
-  }
+  // Widget publicGameButton() {
+  //   return RaisedButton(
+  //     child: Text(
+  //       "Find Public Game",
+  //       style: TextStyle(color: Colors.white, fontSize: 18.0),
+  //     ),
+  //     color: Color(0xff00B16A),
+  //     onPressed: () {},
+  //   );
+  // }
 
-  Widget createPrivateGameButton() {
+  Widget createGameButton() {
     return RaisedButton(
       child: Text(
         "Create Private Game",
@@ -128,7 +108,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
       onPressed: () {
         _bloc.createPrivateGame().then((value) =>
             Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return TwentyNineBoardBlocProvider(
+              return WarBoardBlocProvider(
                   child: BoardScreen(
                 gameCode: value,
               ));
@@ -137,7 +117,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
     );
   }
 
-  Widget joinPrivateGameButton() {
+  Widget joinGameButton() {
     return RaisedButton(
       child: Text(
         "Join Private Game",
@@ -171,16 +151,13 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 FlatButton(
                   child: Text('JOIN', style: TextStyle(color: Colors.green)),
                   onPressed: () {
-                    _bloc.joinPrivateGame();
-                    _bloc.userJoinCode.listen((event) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return TwentyNineBoardBlocProvider(
-                            child: BoardScreen(
-                          gameCode: event,
-                        ));
-                      }));
-                    });
+                    _bloc.joinPrivateGame().then((value) => Navigator.push(
+                            context, MaterialPageRoute(builder: (context) {
+                          return WarBoardBlocProvider(
+                              child: BoardScreen(
+                            gameCode: value,
+                          ));
+                        })));
                   },
                 )
               ],
