@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tabletop_gui/src/blocs/fifteen-puzzle-game/fifteen_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/snake-game/snake-game_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_lobby_bloc_provider.dart';
+import 'package:tabletop_gui/src/screens/fifteen-puzzle-game/fifteen_board.dart';
 import 'package:tabletop_gui/src/screens/snake-game/snake-game_board.dart';
 import 'package:tabletop_gui/src/screens/war-card-game/war_lobby.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
@@ -8,9 +10,16 @@ import 'package:tabletop_gui/src/utils/strings.dart';
 class GamesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[twentyNine(context), snakeGame(context)],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 50.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          twentyNine(context),
+          snakeGame(context),
+          fifteenPuzzle(context)
+        ],
+      ),
     );
   }
 
@@ -18,7 +27,7 @@ class GamesScreen extends StatelessWidget {
     return GestureDetector(
       child: Card(
         color: Color(0xff212049),
-        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 50.0),
+        margin: EdgeInsets.symmetric(vertical: 30.0),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           children: <Widget>[
@@ -72,7 +81,7 @@ class GamesScreen extends StatelessWidget {
     return GestureDetector(
       child: Card(
         color: Color(0xff212049),
-        margin: EdgeInsets.all(40.0),
+        margin: EdgeInsets.symmetric(vertical: 30.0),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           children: <Widget>[
@@ -100,6 +109,43 @@ class GamesScreen extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return SnakeGameBlocProvider(child: SnakeGameBoard());
+        }));
+      },
+    );
+  }
+
+  Widget fifteenPuzzle(BuildContext context) {
+    return GestureDetector(
+      child: Card(
+        color: Color(0xff212049),
+        margin: EdgeInsets.symmetric(vertical: 30.0),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Column(
+          children: <Widget>[
+            Container(
+              child: Image.asset("assets/images/fifteen_puzzle_thumbnail.jpg"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    StringConstant.fifteenPuzzleTitle,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return FifteenBlocProvider(child: FifteenPuzzleBoard());
         }));
       },
     );

@@ -6,7 +6,12 @@ class AudioManager {
   static AudioPlayer player;
 
   AudioManager() {
-    cache.loadAll(["pickup_fruit.mp3", "snake_death.mp3", "snake_music.mp3"]);
+    cache.loadAll([
+      "pickup_fruit.mp3",
+      "snake_death.mp3",
+      "snake_music.mp3",
+      "fifteen_tile_slide.mp3"
+    ]);
   }
 
   static void playSound(String fileName, double volume) async {
@@ -26,4 +31,4 @@ class AudioManager {
   }
 }
 
-//TODO ADD TO CREDITS: Trevor Lentz for snake_music
+//TODO ADD TO CREDITS: Trevor Lentz for snake_music, Little Robot

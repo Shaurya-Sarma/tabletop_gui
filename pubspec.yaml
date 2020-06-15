@@ -31,6 +31,7 @@ dependencies:
   uuid: ^2.0.4
   rxdart: ^0.24.1
   audioplayers: ^0.15.1
+  flutter_timer: ^0.0.6
 
   flutter:
     sdk: flutter
@@ -59,11 +60,13 @@ flutter:
     - assets/images/Felt.png
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
+    - assets/images/fifteen_puzzle_thumbnail.jpg
 
     - assets/images/apple_sprite.png
     - assets/audio/pickup_fruit.mp3
     - assets/audio/snake_death.mp3
     - assets/audio/snake_music.mp3
+    - assets/audio/fifteen_tile_slide.mp3
 
     - assets/images/snake_sprites/snake-tail-right.png
     - assets/images/snake_sprites/snake-tail-left.png

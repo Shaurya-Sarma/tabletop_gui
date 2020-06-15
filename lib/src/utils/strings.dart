@@ -24,4 +24,5 @@ class StringConstant {
 
   static const String warTitle = "War";
   static const String snakeGameTitle = "Snake Game";
+  static const String fifteenPuzzleTitle = "Fifteen Puzzle";
 }
