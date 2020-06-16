@@ -44,4 +44,8 @@ class Repository {
   dynamic findGameData(String gameCode) {
     return _firestoreProvider.findGameData(gameCode);
   }
+
+  void listenForChanges(String collectionName) {
+    return _firestoreProvider.listenForChanges(collectionName);
+  }
 }

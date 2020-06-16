@@ -120,6 +120,25 @@ class FirestoreProvider {
     return userJoinCode;
   }
 
+  void updateGame(Game gameObj) async {
+    QuerySnapshot gameInstance = await Firestore.instance
+        .collection("games")
+        .where("uid", isEqualTo: "${gameObj.uuid}")
+        .getDocuments();
+
+    gameInstance.documents.forEach((doc) async {
+      DocumentSnapshot document = await doc.reference.get();
+      List<dynamic> gameData = document.data['game'];
+
+      doc.reference.updateData({
+        'playerOneDeck': gameObj.game['playerOneDeck'],
+        'playerTwoDeck': gameObj.game['playerTwoDeck'],
+        'playerOneCard': gameObj.game['playerOneCard'],
+        'playerTwoCard': gameObj.game['playerTwoCard'],
+      });
+    });
+  }
+
   void exitGame(String gameCode) async {
     QuerySnapshot gameInstance = await Firestore.instance
         .collection("games")
@@ -129,7 +148,9 @@ class FirestoreProvider {
     gameInstance.documents.forEach((doc) async {
       DocumentSnapshot document = await doc.reference.get();
       List<dynamic> players = document.data['players'];
-      players.remove(_currentUser.value);
+      players.removeWhere(
+          (element) => element["email"] == _currentUser.value.email);
+
       doc.reference.updateData({
         'players': players,
       });
@@ -152,6 +173,25 @@ class FirestoreProvider {
         Game(gameData["type"], gameData["uid"], players, gameData["game"]));
 
     return gameData;
+  }
+
+  void listenForChanges(String gameCode) {
+    Query reference =
+        _firestore.collection("games").where("uid", isEqualTo: "$gameCode");
+    reference.snapshots().listen((querySnapshot) {
+      //querySnapshot.documentChanges.forEach((change) {
+      //findGameData(_currentGame.listen((value) {
+      // return value.uuid;
+      //}).toString());
+      //});
+      Map<String, dynamic> gameData = querySnapshot.documents.first.data;
+      //print('players ${gameData["players"]}');
+      List<dynamic> players = gameData["players"];
+      //players.cast<User>().toList();
+
+      _currentGame.sink.add(
+          Game(gameData["type"], gameData["uid"], players, gameData["game"]));
+    });
   }
 
   void dispose() async {

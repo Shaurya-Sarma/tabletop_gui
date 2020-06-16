@@ -10,5 +10,9 @@ class WarBoardBloc extends BaseBloc {
     repository.exitGame(gameCode);
   }
 
+  void listenForChanges(String gameCode) {
+    repository.listenForChanges(gameCode);
+  }
+
   void dispose() {}
 }

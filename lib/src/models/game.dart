@@ -1,5 +1,3 @@
-import 'package:tabletop_gui/src/models/user.dart';
-
 class Game {
   String _type;
   String _uid;

@@ -23,7 +23,7 @@ class _BoardScreenState extends State<BoardScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = WarBoardBlocProvider.of(context);
-    _bloc.findGameData(gameCode);
+    _bloc.listenForChanges(gameCode);
   }
 
   @override
