@@ -18,6 +18,7 @@ class _BoardScreenState extends State<BoardScreen> {
   _BoardScreenState(this.gameCode);
 
   WarBoardBloc _bloc;
+  bool isGameActive = false;
 
   @override
   void didChangeDependencies() {
@@ -31,6 +32,8 @@ class _BoardScreenState extends State<BoardScreen> {
     _bloc.dispose();
     super.dispose();
   }
+
+  void gameManager() {}
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +65,10 @@ class _BoardScreenState extends State<BoardScreen> {
                         height: 150,
                       )
                     ]),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  child: playerBoard(),
+                ),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -232,6 +239,41 @@ class _BoardScreenState extends State<BoardScreen> {
           );
         }
       },
+    );
+  }
+
+  Widget playerBoard() {
+    return Column(
+      children: <Widget>[
+        Visibility(
+          visible: !isGameActive,
+          child: RaisedButton(
+            child: Text(
+              "Start",
+            ),
+            onPressed: () {
+              setState(() {
+                isGameActive = true;
+              });
+              gameManager();
+            },
+          ),
+        ),
+        Visibility(
+          visible: isGameActive,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(
+                  image: AssetImage('assets/images/cards/back.png'),
+                  height: 150),
+              Image(
+                  image: AssetImage('assets/images/cards/back.png'),
+                  height: 150),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

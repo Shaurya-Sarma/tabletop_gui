@@ -13,7 +13,7 @@ class WarLobbyBloc extends BaseBloc {
   Function(String) get changeUserJoinCode => _userJoinCode.sink.add;
 
   Future<String> createPrivateGame() async {
-    return repository.createPrivateGame(UniqueKey().toString(), "twenty-nine");
+    return repository.createPrivateGame(UniqueKey().toString(), "War");
   }
 
   Future<String> joinPrivateGame() async {
@@ -21,7 +21,7 @@ class WarLobbyBloc extends BaseBloc {
   }
 
   void launchURL() async {
-    const url = 'https://gamerules.com/rules/twenty-nine-card-game/';
+    const url = 'https://gamerules.com/rules/war-card-game/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
