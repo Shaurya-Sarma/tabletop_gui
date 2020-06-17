@@ -41,16 +41,35 @@ class _BoardScreenState extends State<BoardScreen> {
             padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    backArrow(),
-                    joinCodeButton(),
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(bottom: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      backArrow(),
+                      joinCodeButton(),
+                    ],
+                  ),
                 ),
-                playerOne(),
-                playerTwo(),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      playerOne(),
+                      Image(
+                        image: AssetImage('assets/images/cards/back.png'),
+                        height: 150,
+                      )
+                    ]),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Image(
+                          image: AssetImage('assets/images/cards/back.png'),
+                          height: 150),
+                      playerTwo()
+                    ]),
               ],
             ),
           )),
@@ -67,9 +86,9 @@ class _BoardScreenState extends State<BoardScreen> {
 
   Widget backArrow() {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios),
+      icon: Icon(Icons.arrow_back),
       color: Colors.white,
-      iconSize: 36.0,
+      iconSize: 30.0,
       onPressed: () async {
         _bloc.exitGame(gameCode);
         Navigator.pop(context);
@@ -130,14 +149,39 @@ class _BoardScreenState extends State<BoardScreen> {
         if (snapshot.hasData) {
           Game game = snapshot.data;
           print('game received ${game.players[0]}');
-          return CircleAvatar(
-            backgroundImage: NetworkImage('${game.players[0]["photoUrl"]}'),
-            radius: 30,
+          return Column(
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: NetworkImage('${game.players[0]["photoUrl"]}'),
+                radius: 30,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  "${game.players[0]["displayName"]}",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              )
+            ],
           );
         } else {
-          return Icon(
-            Icons.account_circle,
-            color: Colors.white,
+          return Column(
+            children: <Widget>[
+              Icon(
+                Icons.account_circle,
+                color: Colors.white,
+                size: 60,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  "Invite A Player",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              )
+            ],
           );
         }
       },
@@ -151,14 +195,40 @@ class _BoardScreenState extends State<BoardScreen> {
         if (snapshot.hasData && snapshot.data.players.length == 2) {
           Game game = snapshot.data;
           print('game received ${game.players[1]}');
-          return CircleAvatar(
-            backgroundImage: NetworkImage('${game.players[1]["photoUrl"]}'),
-            radius: 30,
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: NetworkImage('${game.players[1]["photoUrl"]}'),
+                radius: 30,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  "${game.players[1]["displayName"]}",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              )
+            ],
           );
         } else {
-          return Icon(
-            Icons.account_circle,
-            color: Colors.white,
+          return Column(
+            children: <Widget>[
+              Icon(
+                Icons.account_circle,
+                color: Colors.white,
+                size: 60,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.0),
+                child: Text(
+                  "Invite A Player",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.w600),
+                ),
+              )
+            ],
           );
         }
       },

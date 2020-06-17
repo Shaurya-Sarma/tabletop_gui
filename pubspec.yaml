@@ -62,6 +62,8 @@ flutter:
     - assets/images/war_thumbnail.jpg
     - assets/images/fifteen_puzzle_thumbnail.jpg
 
+    - assets/images/cards/back.png
+
     - assets/images/apple_sprite.png
     - assets/audio/pickup_fruit.mp3
     - assets/audio/snake_death.mp3
