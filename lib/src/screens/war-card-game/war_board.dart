@@ -46,37 +46,18 @@ class _BoardScreenState extends State<BoardScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(bottom: 30.0),
-                  child: Row(
+                header(),
+                Expanded(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      backArrow(),
-                      joinCodeButton(),
+                      playerOneSide(),
+                      playerBoard(),
+                      playerTwoSide(),
                     ],
                   ),
                 ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      playerOne(),
-                      Image(
-                        image: AssetImage('assets/images/cards/back.png'),
-                        height: 150,
-                      )
-                    ]),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
-                  child: playerBoard(),
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Image(
-                          image: AssetImage('assets/images/cards/back.png'),
-                          height: 150),
-                      playerTwo()
-                    ]),
               ],
             ),
           )),
@@ -89,6 +70,19 @@ class _BoardScreenState extends State<BoardScreen> {
       image: AssetImage('assets/images/Felt.png'),
       fit: BoxFit.cover,
     ));
+  }
+
+  Widget header() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 40.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          backArrow(),
+          joinCodeButton(),
+        ],
+      ),
+    );
   }
 
   Widget backArrow() {
@@ -149,6 +143,18 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
+  Widget playerOneSide() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          playerOne(),
+          Image(
+            image: AssetImage('assets/images/cards/back.png'),
+            height: 150,
+          )
+        ]);
+  }
+
   Widget playerOne() {
     return StreamBuilder(
       stream: _bloc.currentGame(),
@@ -193,6 +199,15 @@ class _BoardScreenState extends State<BoardScreen> {
         }
       },
     );
+  }
+
+  Widget playerTwoSide() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Image(image: AssetImage('assets/images/cards/back.png'), height: 150),
+          playerTwo()
+        ]);
   }
 
   Widget playerTwo() {

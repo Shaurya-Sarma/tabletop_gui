@@ -18,7 +18,7 @@ class WarGame {
   PlayingCard get playerOneCard => _playerOneCard;
   PlayingCard get playerTwoCard => _playerTwoCard;
 
-  Map<String, dynamic> toMap() {
+  Map toJson() {
     return {
       'playerOneDeck': playerOneDeck,
       'playerTwoDeck': playerTwoDeck,

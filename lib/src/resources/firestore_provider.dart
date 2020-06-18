@@ -127,15 +127,7 @@ class FirestoreProvider {
         .getDocuments();
 
     gameInstance.documents.forEach((doc) async {
-      DocumentSnapshot document = await doc.reference.get();
-      List<dynamic> gameData = document.data['game'];
-
-      doc.reference.updateData({
-        'playerOneDeck': gameObj.game['playerOneDeck'],
-        'playerTwoDeck': gameObj.game['playerTwoDeck'],
-        'playerOneCard': gameObj.game['playerOneCard'],
-        'playerTwoCard': gameObj.game['playerTwoCard'],
-      });
+      doc.reference.updateData({'game': gameObj.game});
     });
   }
 
