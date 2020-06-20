@@ -19,7 +19,7 @@ class _BoardScreenState extends State<BoardScreen> {
 
   WarBoardBloc _bloc;
   bool isGameActive = false;
-  bool playerOneTurn = false;
+  bool playerOneTurn = true;
 
   @override
   void didChangeDependencies() {
@@ -155,7 +155,10 @@ class _BoardScreenState extends State<BoardScreen> {
             child: Image(
                 image: AssetImage('assets/images/cards/back.png'), height: 150),
             onTap: () {
-              playerOneTurn ? _bloc.playerMove(0) : null;
+              if (playerOneTurn) {
+                _bloc.playerMove(1);
+                playerOneTurn = !playerOneTurn;
+              }
             },
           ),
         ]);
@@ -220,7 +223,10 @@ class _BoardScreenState extends State<BoardScreen> {
             child: Image(
                 image: AssetImage('assets/images/cards/back.png'), height: 150),
             onTap: () {
-              !playerOneTurn ? _bloc.playerMove(1) : null;
+              if (!playerOneTurn) {
+                _bloc.playerMove(2);
+                playerOneTurn = !playerOneTurn;
+              }
             },
           ),
           playerTwo()

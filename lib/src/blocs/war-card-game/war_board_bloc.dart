@@ -20,6 +20,7 @@ class WarBoardBloc extends BaseBloc {
     "king": 13,
     "ace": 14,
   };
+  int turnCounter = 0;
 
   void initGame() async {
     List<PlayingCard> deck = [];
@@ -40,8 +41,40 @@ class WarBoardBloc extends BaseBloc {
     repository.updateGame(g);
   }
 
-  playerMove(int playerNumber) async {
+  void playerMove(int playerNumber) async {
     Game g = await currentGame().first;
+    WarGame wg = g.game as WarGame;
+    if (playerNumber == 1) {
+      PlayingCard selectedCard = wg.playerOneDeck.removeAt(0);
+      wg.setPlayerOneCard(selectedCard);
+    } else {
+      PlayingCard selectedCard = wg.playerTwoDeck.removeAt(0);
+      wg.setPlayerTwoCard(selectedCard);
+    }
+    repository.updateGame(g);
+    turnCounter++;
+
+    if (turnCounter == 2) {
+      calculateWinner();
+    }
+  }
+
+  void calculateWinner() async {
+    Game g = await currentGame().first;
+    WarGame wg = g.game as WarGame;
+    if (wg.playerOneCard.value > wg.playerTwoCard.value) {
+      wg.playerOneDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
+      wg.setPlayerOneCard(null);
+      wg.setPlayerTwoCard(null);
+    } else if (wg.playerTwoCard.value > wg.playerOneCard.value) {
+      wg.playerTwoDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
+      wg.setPlayerOneCard(null);
+      wg.setPlayerTwoCard(null);
+    } else {
+      //TODO IMPLEMENT WAR
+    }
+
+    turnCounter = 0;
   }
 
   findGameData(String gameCode) {

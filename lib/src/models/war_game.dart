@@ -19,14 +19,24 @@ class WarGame implements Entity {
   List<PlayingCard> get playerOneDeck => _playerOneDeck;
   List<PlayingCard> get playerTwoDeck => _playerTwoDeck;
 
+  void setPlayerOneCard(PlayingCard card) {
+    _playerOneCard = card;
+  }
+
+  void setPlayerTwoCard(PlayingCard card) {
+    _playerTwoCard = card;
+  }
+
   Map toJson() {
     Map map = {
       'playerOneCard': playerOneCard != null ? playerOneCard.toJson() : null,
       'playerTwoCard': playerTwoCard != null ? playerTwoCard.toJson() : null,
-      'playerOneDeck':
-          playerOneDeck != null ? playerOneDeck.map((e) => e.toJson()).toList() : null,
-      'playerTwoDeck':
-          playerTwoDeck != null ? playerTwoDeck.map((e) => e.toJson()).toList() : null,
+      'playerOneDeck': playerOneDeck != null
+          ? playerOneDeck.map((e) => e.toJson()).toList()
+          : null,
+      'playerTwoDeck': playerTwoDeck != null
+          ? playerTwoDeck.map((e) => e.toJson()).toList()
+          : null,
     };
 
     return map;
