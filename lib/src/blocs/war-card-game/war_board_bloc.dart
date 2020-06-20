@@ -60,8 +60,7 @@ class WarBoardBloc extends BaseBloc {
   }
 
   void calculateWinner() async {
-    Game g = await currentGame().first;
-    WarGame wg = g.game as WarGame;
+    WarGame wg = getWarGame();
     if (wg.playerOneCard.value > wg.playerTwoCard.value) {
       wg.playerOneDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
       wg.setPlayerOneCard(null);
@@ -75,6 +74,11 @@ class WarBoardBloc extends BaseBloc {
     }
 
     turnCounter = 0;
+  }
+
+  getWarGame() async {
+    Game g = await currentGame().first;
+    return g.game as WarGame;
   }
 
   findGameData(String gameCode) {

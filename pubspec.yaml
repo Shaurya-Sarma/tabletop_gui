@@ -57,19 +57,70 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/download.jpg
-    - assets/images/Felt.png
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
     - assets/images/fifteen_puzzle_thumbnail.jpg
 
-    - assets/images/cards/back.png
+    - assets/images/Felt.png
+    - assets/images/cards/empty_of_empty.png
+    - assets/images/cards/ace_of_clubs.png
+    - assets/images/cards/ace_of_diamonds.png
+    - assets/images/cards/ace_of_hearts.png
+    - assets/images/cards/ace_of_spades.png
+    - assets/images/cards/eight_of_clubs.png
+    - assets/images/cards/eight_of_diamonds.png
+    - assets/images/cards/eight_of_hearts.png
+    - assets/images/cards/eight_of_spades.png
+    - assets/images/cards/five_of_clubs.png
+    - assets/images/cards/five_of_diamonds.png
+    - assets/images/cards/five_of_hearts.png
+    - assets/images/cards/five_of_spades.png
+    - assets/images/cards/four_of_clubs.png
+    - assets/images/cards/four_of_diamonds.png
+    - assets/images/cards/four_of_hearts.png
+    - assets/images/cards/four_of_spades.png
+    - assets/images/cards/jack_of_clubs.png
+    - assets/images/cards/jack_of_diamonds.png
+    - assets/images/cards/jack_of_hearts.png
+    - assets/images/cards/jack_of_spades.png
+    - assets/images/cards/king_of_clubs.png
+    - assets/images/cards/king_of_diamonds.png
+    - assets/images/cards/king_of_hearts.png
+    - assets/images/cards/king_of_spades.png
+    - assets/images/cards/nine_of_clubs.png
+    - assets/images/cards/nine_of_diamonds.png
+    - assets/images/cards/nine_of_hearts.png
+    - assets/images/cards/nine_of_spades.png
+    - assets/images/cards/queen_of_clubs.png
+    - assets/images/cards/queen_of_diamonds.png
+    - assets/images/cards/queen_of_hearts.png
+    - assets/images/cards/queen_of_spades.png
+    - assets/images/cards/seven_of_clubs.png
+    - assets/images/cards/seven_of_diamonds.png
+    - assets/images/cards/seven_of_hearts.png
+    - assets/images/cards/seven_of_spades.png
+    - assets/images/cards/six_of_clubs.png
+    - assets/images/cards/six_of_diamonds.png
+    - assets/images/cards/six_of_hearts.png
+    - assets/images/cards/six_of_spades.png
+    - assets/images/cards/ten_of_clubs.png
+    - assets/images/cards/ten_of_diamonds.png
+    - assets/images/cards/ten_of_hearts.png
+    - assets/images/cards/ten_of_spades.png
+    - assets/images/cards/three_of_clubs.png
+    - assets/images/cards/three_of_diamonds.png
+    - assets/images/cards/three_of_hearts.png
+    - assets/images/cards/three_of_spades.png
+    - assets/images/cards/two_of_clubs.png
+    - assets/images/cards/two_of_diamonds.png
+    - assets/images/cards/two_of_hearts.png
+    - assets/images/cards/two_of_spades.png
 
-    - assets/images/apple_sprite.png
     - assets/audio/pickup_fruit.mp3
     - assets/audio/snake_death.mp3
     - assets/audio/snake_music.mp3
-    - assets/audio/fifteen_tile_slide.mp3
 
+    - assets/images/apple_sprite.png
     - assets/images/snake_sprites/snake-tail-right.png
     - assets/images/snake_sprites/snake-tail-left.png
     - assets/images/snake_sprites/snake-tail-down.png
@@ -84,6 +135,8 @@ flutter:
     - assets/images/snake_sprites/snake-corner-lu.png
     - assets/images/snake_sprites/snake-corner-rd.png
     - assets/images/snake_sprites/snake-corner-ru.png
+
+    - assets/audio/fifteen_tile_slide.mp3
       # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

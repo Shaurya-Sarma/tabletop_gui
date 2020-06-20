@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
 import 'package:tabletop_gui/src/models/game.dart';
+import 'package:tabletop_gui/src/models/war_game.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -20,6 +21,9 @@ class _BoardScreenState extends State<BoardScreen> {
   WarBoardBloc _bloc;
   bool isGameActive = false;
   bool playerOneTurn = true;
+  WarGame wg = WarBoardBloc().getWarGame();
+  Map<String, String> playerOneCardImage = {'suit': "empty", 'rank': "empty"};
+  Map<String, String> playerTwoCardImage = {'suit': "empty", 'rank': "empty"};
 
   @override
   void didChangeDependencies() {
@@ -153,11 +157,17 @@ class _BoardScreenState extends State<BoardScreen> {
           playerOne(),
           GestureDetector(
             child: Image(
-                image: AssetImage('assets/images/cards/back.png'), height: 150),
+                image: AssetImage(
+                    'assets/images/cards/${playerOneCardImage["rank"]}_of_${playerOneCardImage["suit"]}.png'),
+                height: 150),
             onTap: () {
               if (playerOneTurn) {
                 _bloc.playerMove(1);
                 playerOneTurn = !playerOneTurn;
+                setState(() {
+                  playerOneCardImage["rank"] = wg.playerOneCard.rank;
+                  playerOneCardImage["suit"] = wg.playerOneCard.suit;
+                });
               }
             },
           ),
@@ -185,11 +195,10 @@ class _BoardScreenState extends State<BoardScreen> {
                       color: Colors.white, fontWeight: FontWeight.w600),
                 ),
               ),
-              // Visibility(
-              //   visible: isGameActive,
-              //   child: Text(
-              //       "Cards Remaining: ${game.game.toJson()["playerOneDeck"]}"),
-              // )
+              Visibility(
+                visible: isGameActive,
+                child: Text("Cards Remaining: ${wg.playerOneDeck.length}"),
+              )
             ],
           );
         } else {
@@ -221,11 +230,17 @@ class _BoardScreenState extends State<BoardScreen> {
         children: <Widget>[
           GestureDetector(
             child: Image(
-                image: AssetImage('assets/images/cards/back.png'), height: 150),
+                image: AssetImage(
+                    'assets/images/cards/${playerTwoCardImage["rank"]}_of_${playerTwoCardImage["suit"]}.png'),
+                height: 150),
             onTap: () {
               if (!playerOneTurn) {
                 _bloc.playerMove(2);
                 playerOneTurn = !playerOneTurn;
+                setState(() {
+                  playerTwoCardImage["rank"] = wg.playerTwoCard.rank;
+                  playerTwoCardImage["suit"] = wg.playerTwoCard.suit;
+                });
               }
             },
           ),
@@ -255,11 +270,10 @@ class _BoardScreenState extends State<BoardScreen> {
                       color: Colors.white, fontWeight: FontWeight.w600),
                 ),
               ),
-              // Visibility(
-              //   visible: isGameActive,
-              //   child: Text(
-              //       "Cards Remaining: ${game.game.toJson()['playerOneDeck'].toString().length}"),
-              // )
+              Visibility(
+                visible: isGameActive,
+                child: Text("Cards Remaining: ${wg.playerTwoDeck.length}"),
+              )
             ],
           );
         } else {
@@ -308,10 +322,10 @@ class _BoardScreenState extends State<BoardScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image(
-                  image: AssetImage('assets/images/cards/back.png'),
+                  image: AssetImage('assets/images/cards/empty_of_empty.png'),
                   height: 150),
               Image(
-                  image: AssetImage('assets/images/cards/back.png'),
+                  image: AssetImage('assets/images/cards/empty_of_empty.png'),
                   height: 150),
             ],
           ),
