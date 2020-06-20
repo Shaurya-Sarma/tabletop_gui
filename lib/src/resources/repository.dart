@@ -37,6 +37,10 @@ class Repository {
     return _firestoreProvider.joinPrivateGame(userJoinCode);
   }
 
+  void updateGame(Game gameObj) {
+    _firestoreProvider.updateGame(gameObj);
+  }
+
   void exitGame(String gameCode) {
     _firestoreProvider.exitGame(gameCode);
   }

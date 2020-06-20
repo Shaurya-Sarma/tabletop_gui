@@ -19,6 +19,7 @@ class _BoardScreenState extends State<BoardScreen> {
 
   WarBoardBloc _bloc;
   bool isGameActive = false;
+  bool playerOneTurn = false;
 
   @override
   void didChangeDependencies() {
@@ -33,7 +34,9 @@ class _BoardScreenState extends State<BoardScreen> {
     super.dispose();
   }
 
-  void gameManager() {}
+  void gameManager() {
+    _bloc.initGame();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +151,13 @@ class _BoardScreenState extends State<BoardScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           playerOne(),
-          Image(
-            image: AssetImage('assets/images/cards/back.png'),
-            height: 150,
-          )
+          GestureDetector(
+            child: Image(
+                image: AssetImage('assets/images/cards/back.png'), height: 150),
+            onTap: () {
+              playerOneTurn ? _bloc.playerMove(0) : null;
+            },
+          ),
         ]);
   }
 
@@ -175,7 +181,12 @@ class _BoardScreenState extends State<BoardScreen> {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w600),
                 ),
-              )
+              ),
+              // Visibility(
+              //   visible: isGameActive,
+              //   child: Text(
+              //       "Cards Remaining: ${game.game.toJson()["playerOneDeck"]}"),
+              // )
             ],
           );
         } else {
@@ -205,7 +216,13 @@ class _BoardScreenState extends State<BoardScreen> {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Image(image: AssetImage('assets/images/cards/back.png'), height: 150),
+          GestureDetector(
+            child: Image(
+                image: AssetImage('assets/images/cards/back.png'), height: 150),
+            onTap: () {
+              !playerOneTurn ? _bloc.playerMove(1) : null;
+            },
+          ),
           playerTwo()
         ]);
   }
@@ -231,7 +248,12 @@ class _BoardScreenState extends State<BoardScreen> {
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.w600),
                 ),
-              )
+              ),
+              // Visibility(
+              //   visible: isGameActive,
+              //   child: Text(
+              //       "Cards Remaining: ${game.game.toJson()['playerOneDeck'].toString().length}"),
+              // )
             ],
           );
         } else {

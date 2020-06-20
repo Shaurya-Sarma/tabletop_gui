@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tabletop_gui/src/models/game.dart';
 import 'package:tabletop_gui/src/models/user.dart';
+import 'package:tabletop_gui/src/models/war_game.dart';
 
 class FirestoreProvider {
   final Firestore _firestore = Firestore.instance;
@@ -127,7 +128,7 @@ class FirestoreProvider {
         .getDocuments();
 
     gameInstance.documents.forEach((doc) async {
-      doc.reference.updateData({'game': gameObj.game});
+      doc.reference.updateData({'game': gameObj.game.toJson()});
     });
   }
 
@@ -171,18 +172,12 @@ class FirestoreProvider {
     Query reference =
         _firestore.collection("games").where("uid", isEqualTo: "$gameCode");
     reference.snapshots().listen((querySnapshot) {
-      //querySnapshot.documentChanges.forEach((change) {
-      //findGameData(_currentGame.listen((value) {
-      // return value.uuid;
-      //}).toString());
-      //});
       Map<String, dynamic> gameData = querySnapshot.documents.first.data;
-      //print('players ${gameData["players"]}');
       List<dynamic> players = gameData["players"];
-      //players.cast<User>().toList();
+      Map game = gameData["game"];
 
-      _currentGame.sink.add(
-          Game(gameData["type"], gameData["uid"], players, gameData["game"]));
+      _currentGame.sink.add(Game(
+          gameData["type"], gameData["uid"], players, WarGame.fromJson(game)));
     });
   }
 

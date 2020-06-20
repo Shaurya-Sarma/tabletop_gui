@@ -1,8 +1,10 @@
+import 'package:tabletop_gui/src/models/entity.dart';
+
 class Game {
   String _type;
   String _uid;
   List<dynamic> _players;
-  Map<String, dynamic> _game;
+  Entity _game;
 
   Game(this._type, this._uid, this._players, this._game);
 
@@ -12,5 +14,9 @@ class Game {
 
   List<dynamic> get players => _players;
 
-  Map<String, dynamic> get game => _game;
+  Entity get game => _game;
+
+  void setGame(Entity g) {
+    _game = g;
+  }
 }
