@@ -21,7 +21,6 @@ class _BoardScreenState extends State<BoardScreen> {
   WarBoardBloc _bloc;
   bool isGameActive = false;
   bool playerOneTurn = true;
-  WarGame wg = WarBoardBloc().getWarGame();
   Map<String, String> playerOneCardImage = {'suit': "empty", 'rank': "empty"};
   Map<String, String> playerTwoCardImage = {'suit': "empty", 'rank': "empty"};
 
@@ -151,36 +150,46 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget playerOneSide() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          playerOne(),
-          GestureDetector(
-            child: Image(
-                image: AssetImage(
-                    'assets/images/cards/${playerOneCardImage["rank"]}_of_${playerOneCardImage["suit"]}.png'),
-                height: 150),
-            onTap: () {
-              if (playerOneTurn) {
-                _bloc.playerMove(1);
-                playerOneTurn = !playerOneTurn;
-                setState(() {
-                  playerOneCardImage["rank"] = wg.playerOneCard.rank;
-                  playerOneCardImage["suit"] = wg.playerOneCard.suit;
-                });
-              }
-            },
-          ),
-        ]);
+    return StreamBuilder(
+        stream: _bloc.currentGame(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Game game = snapshot.data;
+            WarGame wg = game.game as WarGame;
+            return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  playerOne(),
+                  GestureDetector(
+                    child: Image(
+                        image: AssetImage(
+                            'assets/images/cards/empty_of_empty.png'),
+                        height: 150),
+                    onTap: () {
+                      if (playerOneTurn) {
+                        _bloc.playerMove(1, game);
+                        playerOneTurn = !playerOneTurn;
+
+                        if (wg.turnCounter == 2) {
+                          _bloc.calculateWinner();
+                        }
+                      }
+                    },
+                  ),
+                ]);
+          } else {
+            return Text("Loading Board...");
+          }
+        });
   }
 
   Widget playerOne() {
     return StreamBuilder(
       stream: _bloc.currentGame(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData && snapshot.data.players.length == 1) {
           Game game = snapshot.data;
-          print('game received ${game.players[0]}');
+          WarGame wg = game.game as WarGame;
           return Column(
             children: <Widget>[
               CircleAvatar(
@@ -192,12 +201,20 @@ class _BoardScreenState extends State<BoardScreen> {
                 child: Text(
                   "${game.players[0]["displayName"]}",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.0),
                 ),
               ),
               Visibility(
                 visible: isGameActive,
-                child: Text("Cards Remaining: ${wg.playerOneDeck.length}"),
+                child: Text(
+                  "${wg.playerOneDeck != null ? wg.playerOneDeck.length : ""} Cards Left",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 24.0,
+                      color: Colors.white),
+                ),
               )
             ],
           );
@@ -214,7 +231,9 @@ class _BoardScreenState extends State<BoardScreen> {
                 child: Text(
                   "Invite A Player",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.0),
                 ),
               )
             ],
@@ -225,27 +244,36 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget playerTwoSide() {
-    return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          GestureDetector(
-            child: Image(
-                image: AssetImage(
-                    'assets/images/cards/${playerTwoCardImage["rank"]}_of_${playerTwoCardImage["suit"]}.png'),
-                height: 150),
-            onTap: () {
-              if (!playerOneTurn) {
-                _bloc.playerMove(2);
-                playerOneTurn = !playerOneTurn;
-                setState(() {
-                  playerTwoCardImage["rank"] = wg.playerTwoCard.rank;
-                  playerTwoCardImage["suit"] = wg.playerTwoCard.suit;
-                });
-              }
-            },
-          ),
-          playerTwo()
-        ]);
+    return StreamBuilder(
+        stream: _bloc.currentGame(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Game game = snapshot.data;
+            WarGame wg = game.game as WarGame;
+            return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  GestureDetector(
+                    child: Image(
+                        image: AssetImage(
+                            'assets/images/cards/empty_of_empty.png'),
+                        height: 150),
+                    onTap: () {
+                      if (!playerOneTurn) {
+                        _bloc.playerMove(2, game);
+                        playerOneTurn = !playerOneTurn;
+                        if (wg.turnCounter == 2) {
+                          _bloc.calculateWinner();
+                        }
+                      }
+                    },
+                  ),
+                  playerTwo()
+                ]);
+          } else {
+            return Text("Loading Board...");
+          }
+        });
   }
 
   Widget playerTwo() {
@@ -254,7 +282,7 @@ class _BoardScreenState extends State<BoardScreen> {
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data.players.length == 2) {
           Game game = snapshot.data;
-          print('game received ${game.players[1]}');
+          WarGame wg = game.game as WarGame;
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -267,12 +295,19 @@ class _BoardScreenState extends State<BoardScreen> {
                 child: Text(
                   "${game.players[1]["displayName"]}",
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 28.0),
                 ),
               ),
               Visibility(
                 visible: isGameActive,
-                child: Text("Cards Remaining: ${wg.playerTwoDeck.length}"),
+                child: Text(
+                    "${wg.playerTwoDeck != null ? wg.playerTwoDeck.length : ""} Cards Left",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 24.0,
+                        color: Colors.white)),
               )
             ],
           );
@@ -286,11 +321,12 @@ class _BoardScreenState extends State<BoardScreen> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: Text(
-                  "Invite A Player",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
-                ),
+                child: Text("Invite A Player",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.0,
+                    )),
               )
             ],
           );
@@ -300,37 +336,63 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget playerBoard() {
-    return Column(
-      children: <Widget>[
-        Visibility(
-          visible: !isGameActive,
-          child: RaisedButton(
-            child: Text(
-              "Start",
-            ),
-            onPressed: () {
-              setState(() {
-                isGameActive = true;
-              });
-              gameManager();
-            },
-          ),
-        ),
-        Visibility(
-          visible: isGameActive,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image(
-                  image: AssetImage('assets/images/cards/empty_of_empty.png'),
-                  height: 150),
-              Image(
-                  image: AssetImage('assets/images/cards/empty_of_empty.png'),
-                  height: 150),
-            ],
-          ),
-        ),
-      ],
-    );
+    return StreamBuilder(
+        stream: _bloc.currentGame(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Game game = snapshot.data;
+            WarGame wg = game.game as WarGame;
+            String playerOneRank =
+                wg.playerOneCard != null ? wg.playerOneCard.rank : "empty";
+            String playerOneSuit =
+                wg.playerOneCard != null ? wg.playerOneCard.suit : "empty";
+            String playerTwoRank =
+                wg.playerTwoCard != null ? wg.playerTwoCard.rank : "empty";
+            String playerTwoSuit =
+                wg.playerTwoCard != null ? wg.playerTwoCard.suit : "empty";
+            return Column(
+              children: <Widget>[
+                Visibility(
+                  visible: !isGameActive,
+                  child: RaisedButton(
+                    child: Text(
+                      "Start",
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isGameActive = true;
+                      });
+                      gameManager();
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: isGameActive,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Image(
+                          image: AssetImage(
+                              'assets/images/cards/${playerTwoRank}_of_$playerTwoSuit.png'),
+                          height: 150),
+                      Image(
+                          image: AssetImage(
+                              'assets/images/cards/${playerOneRank}_of_$playerOneSuit.png'),
+                          height: 150),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: isGameActive,
+                  child: wg != null && wg.winner != null && wg.winner >= 0
+                      ? Text("${game.players[wg.winner]["displayName"]} wins")
+                      : Container(),
+                )
+              ],
+            );
+          } else {
+            return Text("Please Wait...");
+          }
+        });
   }
 }

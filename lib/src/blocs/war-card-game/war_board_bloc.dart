@@ -20,7 +20,6 @@ class WarBoardBloc extends BaseBloc {
     "king": 13,
     "ace": 14,
   };
-  int turnCounter = 0;
 
   void initGame() async {
     List<PlayingCard> deck = [];
@@ -32,8 +31,8 @@ class WarBoardBloc extends BaseBloc {
 
     deck.shuffle();
 
-    WarGame wg =
-        WarGame(null, null, deck.sublist(0, 26), deck.sublist(26, deck.length));
+    WarGame wg = WarGame(null, null, deck.sublist(0, 26),
+        deck.sublist(26, deck.length), 0, -1, []);
 
     Game g = await currentGame().first;
 
@@ -41,9 +40,8 @@ class WarBoardBloc extends BaseBloc {
     repository.updateGame(g);
   }
 
-  void playerMove(int playerNumber) async {
-    Game g = await currentGame().first;
-    WarGame wg = g.game as WarGame;
+  void playerMove(int playerNumber, Game game) {
+    WarGame wg = game.game as WarGame;
     if (playerNumber == 1) {
       PlayingCard selectedCard = wg.playerOneDeck.removeAt(0);
       wg.setPlayerOneCard(selectedCard);
@@ -51,34 +49,48 @@ class WarBoardBloc extends BaseBloc {
       PlayingCard selectedCard = wg.playerTwoDeck.removeAt(0);
       wg.setPlayerTwoCard(selectedCard);
     }
-    repository.updateGame(g);
-    turnCounter++;
+    wg.setTurnCounter(wg.turnCounter + 1);
 
-    if (turnCounter == 2) {
-      calculateWinner();
-    }
+    repository.updateGame(game);
   }
 
   void calculateWinner() async {
-    WarGame wg = getWarGame();
+    Game g = await currentGame().first;
+    WarGame wg = g.game as WarGame;
     if (wg.playerOneCard.value > wg.playerTwoCard.value) {
-      wg.playerOneDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
-      wg.setPlayerOneCard(null);
-      wg.setPlayerTwoCard(null);
+      if (wg.tiedCards.isEmpty) {
+        wg.playerOneDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
+        print("occured");
+      } else {
+        wg.playerOneDeck.addAll(wg.tiedCards);
+      }
+      // wg.setPlayerOneCard(null);
+      // wg.setPlayerTwoCard(null);
+      wg.setWinner(0);
     } else if (wg.playerTwoCard.value > wg.playerOneCard.value) {
-      wg.playerTwoDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
-      wg.setPlayerOneCard(null);
-      wg.setPlayerTwoCard(null);
+      if (wg.tiedCards == []) {
+        wg.playerTwoDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
+      } else {
+        wg.playerTwoDeck.addAll(wg.tiedCards);
+      }
+      // wg.setPlayerOneCard(null);
+      // wg.setPlayerTwoCard(null);
+      wg.setWinner(1);
     } else {
-      //TODO IMPLEMENT WAR
+      wg.tiedCards.addAll([wg.playerOneCard, wg.playerTwoCard]);
     }
 
-    turnCounter = 0;
+    wg.setTurnCounter(0);
   }
 
-  getWarGame() async {
-    Game g = await currentGame().first;
-    return g.game as WarGame;
+  int checkGameOver(Game game, WarGame wg) {
+    if (wg.playerOneDeck.length == 0) {
+      return 1; // Player Two Wins
+    } else if (wg.playerTwoDeck.length == 0) {
+      return 0; // Player One Wins
+    } else {
+      return -1; // Nobody Wins
+    }
   }
 
   findGameData(String gameCode) {

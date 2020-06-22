@@ -137,7 +137,7 @@ flutter:
     - assets/images/snake_sprites/snake-corner-ru.png
 
     - assets/audio/fifteen_tile_slide.mp3
-      # An image asset can refer to one or more resolution-specific "variants", see
+      # An image asset can vvvvvvvvvvvvvvvvvv to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages

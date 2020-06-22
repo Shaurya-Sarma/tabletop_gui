@@ -6,18 +6,22 @@ class WarGame implements Entity {
   PlayingCard _playerTwoCard;
   List<PlayingCard> _playerOneDeck;
   List<PlayingCard> _playerTwoDeck;
+  int _turnCounter = 0;
+  int _winner = -1;
+  List<PlayingCard> _tiedCards;
 
-  WarGame(
-    this._playerOneCard,
-    this._playerTwoCard,
-    this._playerOneDeck,
-    this._playerTwoDeck,
-  );
+  WarGame(this._playerOneCard, this._playerTwoCard, this._playerOneDeck,
+      this._playerTwoDeck, this._turnCounter, this._winner, this._tiedCards);
   PlayingCard get playerOneCard => _playerOneCard;
   PlayingCard get playerTwoCard => _playerTwoCard;
 
   List<PlayingCard> get playerOneDeck => _playerOneDeck;
   List<PlayingCard> get playerTwoDeck => _playerTwoDeck;
+
+  int get turnCounter => _turnCounter;
+  int get winner => _winner;
+
+  List<PlayingCard> get tiedCards => _tiedCards;
 
   void setPlayerOneCard(PlayingCard card) {
     _playerOneCard = card;
@@ -25,6 +29,18 @@ class WarGame implements Entity {
 
   void setPlayerTwoCard(PlayingCard card) {
     _playerTwoCard = card;
+  }
+
+  void setTurnCounter(int turnNumber) {
+    _turnCounter = turnNumber;
+  }
+
+  void setWinner(int playerNumber) {
+    _winner = playerNumber;
+  }
+
+  void setTiedCards(List<PlayingCard> cards) {
+    _tiedCards = cards;
   }
 
   Map toJson() {
@@ -37,6 +53,10 @@ class WarGame implements Entity {
       'playerTwoDeck': playerTwoDeck != null
           ? playerTwoDeck.map((e) => e.toJson()).toList()
           : null,
+      'turnCounter': turnCounter,
+      'winner': winner,
+      'tiedCards':
+          tiedCards != null ? tiedCards.map((e) => e.toJson()).toList() : null,
     };
 
     return map;
@@ -45,14 +65,24 @@ class WarGame implements Entity {
   static WarGame fromJson(Map map) {
     Map card1 = map["playerOneCard"];
     Map card2 = map["playerTwoCard"];
-    List<Map> cardDeck1 = map["playerOneDeck"];
-    List<Map> cardDeck2 = map["playerTwoDeck"];
+    List<dynamic> cardDeck1 = map["playerOneDeck"];
+    List<dynamic> cardDeck2 = map["playerTwoDeck"];
+    List<dynamic> tiedCards = map["tiedCards"];
 
     return WarGame(
       PlayingCard.fromJson(card1),
       PlayingCard.fromJson(card2),
-      cardDeck1 != null ? cardDeck1.map((e) => PlayingCard.fromJson(e)) : null,
-      cardDeck2 != null ? cardDeck2.map((e) => PlayingCard.fromJson(e)) : null,
+      cardDeck1 != null
+          ? cardDeck1.map((e) => PlayingCard.fromJson(e)).toList()
+          : null,
+      cardDeck2 != null
+          ? cardDeck2.map((e) => PlayingCard.fromJson(e)).toList()
+          : null,
+      map["turnCounter"],
+      map["winner"],
+      tiedCards != null
+          ? tiedCards.map((e) => PlayingCard.fromJson(e)).toList()
+          : null,
     );
   }
 }
