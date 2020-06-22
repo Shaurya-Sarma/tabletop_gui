@@ -96,7 +96,7 @@ class FirestoreProvider {
       'uid': '$lobbyCode',
       'type': '$gameType',
       'players': [_currentUser.value.toJson()],
-      'game': {}
+      'game': {},
     });
 
     return lobbyCode;
@@ -158,9 +158,7 @@ class FirestoreProvider {
 
     Map<String, dynamic> gameData = gameInstance.documents.first.data;
 
-    //print('players ${gameData["players"]}');
     List<dynamic> players = gameData["players"];
-    //players.cast<User>().toList();
 
     _currentGame.sink.add(
         Game(gameData["type"], gameData["uid"], players, gameData["game"]));

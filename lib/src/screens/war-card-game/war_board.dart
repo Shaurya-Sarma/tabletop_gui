@@ -19,8 +19,6 @@ class _BoardScreenState extends State<BoardScreen> {
   _BoardScreenState(this.gameCode);
 
   WarBoardBloc _bloc;
-  bool isGameActive = false;
-  bool playerOneTurn = true;
   Map<String, String> playerOneCardImage = {'suit': "empty", 'rank': "empty"};
   Map<String, String> playerTwoCardImage = {'suit': "empty", 'rank': "empty"};
 
@@ -35,10 +33,6 @@ class _BoardScreenState extends State<BoardScreen> {
   void dispose() {
     _bloc.dispose();
     super.dispose();
-  }
-
-  void gameManager() {
-    _bloc.initGame();
   }
 
   @override
@@ -166,9 +160,8 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (playerOneTurn) {
+                      if (wg.playerOneTurn) {
                         _bloc.playerMove(1, game);
-                        playerOneTurn = !playerOneTurn;
 
                         if (wg.turnCounter == 2) {
                           _bloc.calculateWinner();
@@ -178,7 +171,8 @@ class _BoardScreenState extends State<BoardScreen> {
                   ),
                 ]);
           } else {
-            return Text("Loading Board...");
+            return Text("Loading Board...",
+                style: TextStyle(color: Colors.white));
           }
         });
   }
@@ -187,7 +181,7 @@ class _BoardScreenState extends State<BoardScreen> {
     return StreamBuilder(
       stream: _bloc.currentGame(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data.players.length == 1) {
+        if (snapshot.hasData && snapshot.data.players.length >= 1) {
           Game game = snapshot.data;
           WarGame wg = game.game as WarGame;
           return Column(
@@ -207,7 +201,7 @@ class _BoardScreenState extends State<BoardScreen> {
                 ),
               ),
               Visibility(
-                visible: isGameActive,
+                visible: wg != null && wg.active != null ? wg.active : false,
                 child: Text(
                   "${wg.playerOneDeck != null ? wg.playerOneDeck.length : ""} Cards Left",
                   style: TextStyle(
@@ -259,9 +253,8 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (!playerOneTurn) {
+                      if (!wg.playerOneTurn) {
                         _bloc.playerMove(2, game);
-                        playerOneTurn = !playerOneTurn;
                         if (wg.turnCounter == 2) {
                           _bloc.calculateWinner();
                         }
@@ -271,7 +264,10 @@ class _BoardScreenState extends State<BoardScreen> {
                   playerTwo()
                 ]);
           } else {
-            return Text("Loading Board...");
+            return Text(
+              "Loading Board...",
+              style: TextStyle(color: Colors.white),
+            );
           }
         });
   }
@@ -297,11 +293,11 @@ class _BoardScreenState extends State<BoardScreen> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
-                      fontSize: 28.0),
+                      fontSize: 18.0),
                 ),
               ),
               Visibility(
-                visible: isGameActive,
+                visible: wg != null && wg.active != null ? wg.active : false,
                 child: Text(
                     "${wg.playerTwoDeck != null ? wg.playerTwoDeck.length : ""} Cards Left",
                     style: TextStyle(
@@ -353,21 +349,18 @@ class _BoardScreenState extends State<BoardScreen> {
             return Column(
               children: <Widget>[
                 Visibility(
-                  visible: !isGameActive,
+                  visible: wg != null && wg.active != null ? !wg.active : true,
                   child: RaisedButton(
                     child: Text(
                       "Start",
                     ),
                     onPressed: () {
-                      setState(() {
-                        isGameActive = true;
-                      });
-                      gameManager();
+                      _bloc.initGame();
                     },
                   ),
                 ),
                 Visibility(
-                  visible: isGameActive,
+                  visible: wg != null && wg.active != null ? wg.active : false,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -383,7 +376,7 @@ class _BoardScreenState extends State<BoardScreen> {
                   ),
                 ),
                 Visibility(
-                  visible: isGameActive,
+                  visible: wg != null && wg.active != null ? wg.active : false,
                   child: wg != null && wg.winner != null && wg.winner >= 0
                       ? Text("${game.players[wg.winner]["displayName"]} wins")
                       : Container(),

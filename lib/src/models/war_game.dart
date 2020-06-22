@@ -9,9 +9,19 @@ class WarGame implements Entity {
   int _turnCounter = 0;
   int _winner = -1;
   List<PlayingCard> _tiedCards;
+  bool _active = false;
+  bool _playerOneTurn = true;
 
-  WarGame(this._playerOneCard, this._playerTwoCard, this._playerOneDeck,
-      this._playerTwoDeck, this._turnCounter, this._winner, this._tiedCards);
+  WarGame(
+      this._playerOneCard,
+      this._playerTwoCard,
+      this._playerOneDeck,
+      this._playerTwoDeck,
+      this._turnCounter,
+      this._winner,
+      this._tiedCards,
+      this._active,
+      this._playerOneTurn);
   PlayingCard get playerOneCard => _playerOneCard;
   PlayingCard get playerTwoCard => _playerTwoCard;
 
@@ -22,6 +32,8 @@ class WarGame implements Entity {
   int get winner => _winner;
 
   List<PlayingCard> get tiedCards => _tiedCards;
+  bool get active => _active;
+  bool get playerOneTurn => _playerOneTurn;
 
   void setPlayerOneCard(PlayingCard card) {
     _playerOneCard = card;
@@ -39,8 +51,16 @@ class WarGame implements Entity {
     _winner = playerNumber;
   }
 
-  void setTiedCards(List<PlayingCard> cards) {
+  void setTiedCards(List<dynamic> cards) {
     _tiedCards = cards;
+  }
+
+  void setActive(bool active) {
+    _active = active;
+  }
+
+  void setPlayerOneTurn(bool isPlayerOneTurn) {
+    _playerOneTurn = isPlayerOneTurn;
   }
 
   Map toJson() {
@@ -57,6 +77,8 @@ class WarGame implements Entity {
       'winner': winner,
       'tiedCards':
           tiedCards != null ? tiedCards.map((e) => e.toJson()).toList() : null,
+      'active': active,
+      'playerOneTurn': playerOneTurn,
     };
 
     return map;
@@ -83,6 +105,8 @@ class WarGame implements Entity {
       tiedCards != null
           ? tiedCards.map((e) => PlayingCard.fromJson(e)).toList()
           : null,
+      map["active"],
+      map["playerOneTurn"],
     );
   }
 }
