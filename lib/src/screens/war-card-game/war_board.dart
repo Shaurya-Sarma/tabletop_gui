@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
 import 'package:tabletop_gui/src/models/game.dart';
+import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/models/war_game.dart';
 
 class BoardScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class BoardScreen extends StatefulWidget {
 class _BoardScreenState extends State<BoardScreen> {
   String gameCode;
   _BoardScreenState(this.gameCode);
+  User _user;
 
   WarBoardBloc _bloc;
   Map<String, String> playerOneCardImage = {'suit': "empty", 'rank': "empty"};
@@ -27,6 +29,9 @@ class _BoardScreenState extends State<BoardScreen> {
     super.didChangeDependencies();
     _bloc = WarBoardBlocProvider.of(context);
     _bloc.listenForChanges(gameCode);
+    _bloc.currentUser().listen((event) {
+      _user = event;
+    });
   }
 
   @override
@@ -160,11 +165,12 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (wg.playerOneTurn) {
+                      if (wg.playerOneTurn &&
+                          _user.email == game.players[0]["email"]) {
                         _bloc.playerMove(1, game);
 
                         if (wg.turnCounter == 2) {
-                          _bloc.calculateWinner();
+                          _bloc.calculateWinner(game);
                         }
                       }
                     },
@@ -253,10 +259,11 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (!wg.playerOneTurn) {
+                      if (!wg.playerOneTurn &&
+                          _user.email == game.players[1]["email"]) {
                         _bloc.playerMove(2, game);
                         if (wg.turnCounter == 2) {
-                          _bloc.calculateWinner();
+                          _bloc.calculateWinner(game);
                         }
                       }
                     },
