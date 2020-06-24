@@ -6,6 +6,7 @@ import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dar
 import 'package:tabletop_gui/src/models/game.dart';
 import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/models/war_game.dart';
+import 'package:tabletop_gui/src/utils/toast_utils.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -31,6 +32,11 @@ class _BoardScreenState extends State<BoardScreen> {
     _bloc.listenForChanges(gameCode);
     _bloc.currentUser().listen((event) {
       _user = event;
+    });
+
+    _bloc.currentGame().listen((game) {
+      WarGame wg = game.game as WarGame;
+      checkWinner(wg, game);
     });
   }
 
@@ -91,19 +97,29 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   Widget backArrow() {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      color: Colors.white,
-      iconSize: 30.0,
-      onPressed: () async {
-        _bloc.exitGame(gameCode);
-        Navigator.pop(context);
-        SystemChrome.setPreferredOrientations([
-          DeviceOrientation.portraitUp,
-          DeviceOrientation.portraitDown,
-        ]);
-      },
-    );
+    return StreamBuilder(
+        stream: _bloc.currentGame(),
+        builder: (context, snapshot) {
+          Game game = snapshot.data;
+          if (snapshot.hasData) {
+            return IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              iconSize: 30.0,
+              onPressed: () async {
+                _bloc.endGame(game);
+                _bloc.exitGame(gameCode);
+                Navigator.pop(context);
+                SystemChrome.setPreferredOrientations([
+                  DeviceOrientation.portraitUp,
+                  DeviceOrientation.portraitDown,
+                ]);
+              },
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
   Widget joinCodeButton() {
@@ -165,14 +181,7 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (wg.playerOneTurn &&
-                          _user.email == game.players[0]["email"]) {
-                        _bloc.playerMove(1, game);
-
-                        if (wg.turnCounter == 2) {
-                          _bloc.calculateWinner(game);
-                        }
-                      }
+                      cardOnTap(wg, game, 0);
                     },
                   ),
                 ]);
@@ -259,13 +268,7 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      if (!wg.playerOneTurn &&
-                          _user.email == game.players[1]["email"]) {
-                        _bloc.playerMove(2, game);
-                        if (wg.turnCounter == 2) {
-                          _bloc.calculateWinner(game);
-                        }
-                      }
+                      cardOnTap(wg, game, 1);
                     },
                   ),
                   playerTwo()
@@ -277,6 +280,14 @@ class _BoardScreenState extends State<BoardScreen> {
             );
           }
         });
+  }
+
+  void cardOnTap(WarGame wg, Game game, int playerNumber) {
+    bool myTurn = playerNumber == 0 && wg.playerOneTurn ||
+        playerNumber == 1 && !wg.playerOneTurn;
+    if (myTurn && _user.email == game.players[playerNumber]["email"]) {
+      _bloc.playerMove(playerNumber, game);
+    }
   }
 
   Widget playerTwo() {
@@ -382,17 +393,59 @@ class _BoardScreenState extends State<BoardScreen> {
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: wg != null && wg.active != null ? wg.active : false,
-                  child: wg != null && wg.winner != null && wg.winner >= 0
-                      ? Text("${game.players[wg.winner]["displayName"]} wins")
-                      : Container(),
-                )
               ],
             );
           } else {
             return Text("Please Wait...");
           }
         });
+  }
+
+  void checkWinner(WarGame wg, Game game) {
+    print("checkingwinner");
+    if (wg != null && wg.turnCounter == 2) {
+      _bloc.calculateWinner(game);
+      wg != null && wg.winner != null && wg.winner >= 0
+          ? ToastUtils.showToast(
+              context, "${game.players[wg.winner]["displayName"]} wins!")
+          : ToastUtils.showToast(context, "Tiebreaker Round!");
+      int gameWinner = _bloc.checkGameOver(game, wg);
+      if (gameWinner >= 0) {
+        _showEndScreen(gameWinner);
+      }
+    }
+  }
+
+  void _showEndScreen(int playerNumber) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StreamBuilder(
+            stream: _bloc.currentGame(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                Game game = snapshot.data;
+                return AlertDialog(
+                  title: Text("Game Over!"),
+                  content: playerNumber >= 0
+                      ? Text(
+                          "${game.players[playerNumber]["displayName"]} has won the game. Play Again?")
+                      : Text("It was a tie game. Play Again?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("Close"),
+                      onPressed: () {
+                        _bloc.endGame(game);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              } else {
+                return AlertDialog(content: Text("Loading..."));
+              }
+            });
+      },
+    );
   }
 }

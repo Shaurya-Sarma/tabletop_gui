@@ -31,8 +31,8 @@ class WarBoardBloc extends BaseBloc {
 
     deck.shuffle();
 
-    WarGame wg = WarGame(null, null, deck.sublist(0, 26),
-        deck.sublist(26, deck.length), 0, -1, [], false, true);
+    WarGame wg = WarGame(null, null, deck.sublist(0, 4), deck.sublist(26, 30),
+        0, -1, [], false, true);
 
     wg.setActive(true);
 
@@ -45,7 +45,7 @@ class WarBoardBloc extends BaseBloc {
   void playerMove(int playerNumber, Game game) {
     WarGame wg = game.game as WarGame;
 
-    if (playerNumber == 1) {
+    if (playerNumber == 0) {
       PlayingCard selectedCard = wg.playerOneDeck.removeAt(0);
       wg.setPlayerOneCard(selectedCard);
     } else {
@@ -72,11 +72,13 @@ class WarBoardBloc extends BaseBloc {
       case 0:
         wg.playerOneDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
         wg.playerOneDeck.addAll(wg.tiedCards);
+        wg.playerOneDeck.shuffle();
         wg.tiedCards.clear();
         break;
       case 1:
         wg.playerTwoDeck.addAll([wg.playerOneCard, wg.playerTwoCard]);
         wg.playerTwoDeck.addAll(wg.tiedCards);
+        wg.playerTwoDeck.shuffle();
         wg.tiedCards.clear();
         break;
     }
@@ -92,8 +94,15 @@ class WarBoardBloc extends BaseBloc {
     } else if (wg.playerTwoDeck.length == 0) {
       return 0; // Player One Wins
     } else {
-      return -1; // Nobody Wins
+      return -1;
     }
+  }
+
+  void endGame(Game g) {
+    WarGame wg = g.game as WarGame;
+    wg.setActive(false);
+    g.setGame(wg);
+    repository.updateGame(g);
   }
 
   findGameData(String gameCode) {

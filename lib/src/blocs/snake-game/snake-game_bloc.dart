@@ -99,6 +99,4 @@ class SnakeGameBloc {
 
     return false;
   }
-
-  void dispose() {}
 }

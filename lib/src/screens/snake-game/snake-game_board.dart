@@ -21,7 +21,6 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
 
   @override
   void dispose() {
-    _bloc.dispose();
     super.dispose();
   }
 

@@ -32,6 +32,7 @@ dependencies:
   rxdart: ^0.24.1
   audioplayers: ^0.15.1
   flutter_timer: ^0.0.6
+  simple_animations: ^2.2.1
 
   flutter:
     sdk: flutter
