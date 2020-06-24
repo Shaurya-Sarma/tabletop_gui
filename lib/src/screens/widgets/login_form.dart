@@ -82,6 +82,7 @@ class _LoginFormState extends State<LoginForm> {
               decoration: InputDecoration(
                 labelText: StringConstant.emailFieldLabel,
                 prefixIcon: Icon(Icons.email, color: Colors.white),
+                errorText: snapshot.error,
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)),
               ));
@@ -100,6 +101,7 @@ class _LoginFormState extends State<LoginForm> {
             decoration: InputDecoration(
               labelText: StringConstant.passwordFieldLabel,
               prefixIcon: Icon(Icons.lock, color: Colors.white),
+              errorText: snapshot.error,
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white)),
             ));

@@ -8,9 +8,10 @@ class ToastUtils {
   static OverlayEntry _overlayEntry;
   static Duration _duration = Duration(seconds: 2);
 
-  static void showToast(BuildContext context, String message) {
+  static void showToast(
+      BuildContext context, String message, Color toastColor) {
     if (toastTimer == null || !toastTimer.isActive) {
-      _overlayEntry = createOverlayEntry(context, message);
+      _overlayEntry = createOverlayEntry(context, message, toastColor);
       Overlay.of(context).insert(_overlayEntry);
       toastTimer = Timer(_duration, () {
         if (_overlayEntry != null) {
@@ -20,7 +21,8 @@ class ToastUtils {
     }
   }
 
-  static OverlayEntry createOverlayEntry(BuildContext context, String message) {
+  static OverlayEntry createOverlayEntry(
+      BuildContext context, String message, Color toastColor) {
     return OverlayEntry(
         builder: (context) => Positioned(
               top: 50,
@@ -32,7 +34,7 @@ class ToastUtils {
                 child: Container(
                   padding: EdgeInsets.fromLTRB(10, 13, 10, 10),
                   decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: toastColor,
                       borderRadius: BorderRadius.circular(10)),
                   child: Align(
                     alignment: Alignment.center,

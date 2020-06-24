@@ -5,7 +5,6 @@ import 'package:tabletop_gui/src/screens/widgets/logo.dart';
 
 import 'package:tabletop_gui/src/screens/games.dart';
 import 'package:tabletop_gui/src/screens/profile.dart';
-import 'package:tabletop_gui/src/screens/social.dart';
 import 'package:tabletop_gui/src/screens/user_settings.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +21,6 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _children() => <Widget>[
         ProfileScreen(user: widget.user),
         GamesScreen(),
-        SocialScreen(),
         SettingsScreen(),
       ];
 
@@ -49,8 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.account_circle), title: Text("Profile")),
           BottomNavigationBarItem(
               icon: Icon(Icons.gamepad), title: Text("Games")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.people), title: Text("Social")),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), title: Text("Settings")),
         ],

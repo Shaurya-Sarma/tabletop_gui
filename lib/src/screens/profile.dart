@@ -43,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget userProfileImage() {
     return CircleAvatar(
-      backgroundImage: NetworkImage(widget.user.photoUrl),
+      backgroundImage: NetworkImage("${widget.user.photoUrl}"),
       radius: 100,
     );
   }

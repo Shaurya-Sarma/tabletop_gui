@@ -7,6 +7,7 @@ import 'package:tabletop_gui/src/models/game.dart';
 import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/models/war_game.dart';
 import 'package:tabletop_gui/src/utils/toast_utils.dart';
+import 'package:tabletop_gui/src/utils/strings.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -373,7 +374,11 @@ class _BoardScreenState extends State<BoardScreen> {
                       "Start",
                     ),
                     onPressed: () {
-                      _bloc.initGame();
+                      if (game.players.length == 2) {
+                        _bloc.initGame();
+                      } else {
+                        showErrorMessage(context);
+                      }
                     },
                   ),
                 ),
@@ -406,9 +411,9 @@ class _BoardScreenState extends State<BoardScreen> {
     if (wg != null && wg.turnCounter == 2) {
       _bloc.calculateWinner(game);
       wg != null && wg.winner != null && wg.winner >= 0
-          ? ToastUtils.showToast(
-              context, "${game.players[wg.winner]["displayName"]} wins!")
-          : ToastUtils.showToast(context, "Tiebreaker Round!");
+          ? ToastUtils.showToast(context,
+              "${game.players[wg.winner]["displayName"]} wins!", Colors.red)
+          : ToastUtils.showToast(context, "Tiebreaker Round!", Colors.blue);
       int gameWinner = _bloc.checkGameOver(game, wg);
       if (gameWinner >= 0) {
         _showEndScreen(gameWinner);
@@ -447,5 +452,12 @@ class _BoardScreenState extends State<BoardScreen> {
             });
       },
     );
+  }
+
+  void showErrorMessage(BuildContext context) {
+    final snackbar = SnackBar(
+        content: Text(StringConstant.warStartErrorMessage),
+        duration: new Duration(seconds: 2));
+    Scaffold.of(context).showSnackBar(snackbar);
   }
 }

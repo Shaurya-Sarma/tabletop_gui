@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
+import 'package:tabletop_gui/src/utils/toast_utils.dart';
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -60,6 +61,7 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(
                 labelText: StringConstant.usernameField,
                 prefixIcon: Icon(Icons.person, color: Colors.white),
+                errorText: snapshot.error,
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)),
               ));
@@ -77,6 +79,7 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(
                 labelText: StringConstant.emailFieldLabel,
                 prefixIcon: Icon(Icons.email, color: Colors.white),
+                errorText: snapshot.error,
                 enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)),
               ));
@@ -95,6 +98,7 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: InputDecoration(
               labelText: StringConstant.passwordFieldLabel,
               prefixIcon: Icon(Icons.lock, color: Colors.white),
+              errorText: snapshot.error,
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white)),
             ));
@@ -114,6 +118,8 @@ class _RegisterFormState extends State<RegisterForm> {
         if (_bloc.validateFields()) {
           _bloc.registerWithEmail();
           Navigator.pushNamed(context, '/login');
+          ToastUtils.showToast(
+              context, "User Successfully Created!", Colors.green[300]);
         } else {
           showErrorMessage();
         }

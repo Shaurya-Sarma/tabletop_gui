@@ -47,23 +47,6 @@ class GamesScreen extends StatelessWidget {
                         fontWeight: FontWeight.w600),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text("29",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w600,
-                          )),
-                      Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
               ],
             )
           ],

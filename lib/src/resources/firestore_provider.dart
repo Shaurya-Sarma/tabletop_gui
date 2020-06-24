@@ -74,7 +74,7 @@ class FirestoreProvider {
         'displayName': username,
         'email': email,
         'photoUrl':
-            'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/user-alt-512.png',
+            'https://lh3.googleusercontent.com/4ChWnbUKurKdzUWVFlAPqGH9dzlUm9oAH8E4VxHwpW79MPeOY8HQOrkGG-KBVdaZVA=w300',
         'friends': null,
       });
     } catch (e) {

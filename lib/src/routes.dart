@@ -5,7 +5,6 @@ import 'package:tabletop_gui/src/screens/home.dart';
 import 'package:tabletop_gui/src/screens/login.dart';
 import 'package:tabletop_gui/src/screens/profile.dart';
 import 'package:tabletop_gui/src/screens/register.dart';
-import 'package:tabletop_gui/src/screens/social.dart';
 import 'package:tabletop_gui/src/screens/user_settings.dart';
 import 'package:tabletop_gui/src/screens/welcome.dart';
 
@@ -16,7 +15,6 @@ final Map<String, WidgetBuilder> routes = <String, WidgetBuilder>{
   "/home": (BuildContext context) => HomeScreen(user: null),
   "/profile": (BuildContext context) => ProfileScreen(user: null),
   "/games": (BuildContext context) => GamesScreen(),
-  "/friends": (BuildContext context) => SocialScreen(),
   "/settings": (BuildContext context) => SettingsScreen(),
   // "/war-lobby": (BuildContext context) => LobbyScreen(),
   // "/war-board": (BuildContext context) => BoardScreen(gameCode: null),

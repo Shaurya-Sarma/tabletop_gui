@@ -25,4 +25,7 @@ class StringConstant {
   static const String warTitle = "War";
   static const String snakeGameTitle = "Snake Game";
   static const String fifteenPuzzleTitle = "Fifteen Puzzle";
+
+  static const String warStartErrorMessage =
+      "Need Two Players To Start. Invite A Friend!";
 }
