@@ -21,17 +21,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           padding: EdgeInsets.only(top: 35.0),
           child: userProfileImage(),
         ),
-        Padding(padding: EdgeInsets.only(top: 30.0), child: userExperience()),
       ],
     );
   }
 
   Widget userGreeting() {
     return RichText(
+      softWrap: true,
+      textAlign: TextAlign.center,
       text: TextSpan(
           text: "Hello, ",
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w500, fontSize: 40.0),
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 40.0,
+          ),
           children: <TextSpan>[
             TextSpan(
               text: "${widget.user.displayName}",
@@ -48,29 +52,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget userExperience() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          Icons.offline_bolt,
-          color: Color(0xff6FCF97),
-          size: 100.0,
-        ),
-        Padding(
-            padding: EdgeInsets.only(left: 10.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  "LEVEL 3",
-                  style: TextStyle(
-                      color: Color(0xff6FCF97),
-                      fontSize: 26.0,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ))
-      ],
-    );
-  }
+  // Widget userExperience() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: <Widget>[
+  //       Icon(
+  //         Icons.offline_bolt,
+  //         color: Color(0xff6FCF97),
+  //         size: 100.0,
+  //       ),
+  //       Padding(
+  //           padding: EdgeInsets.only(left: 10.0),
+  //           child: Column(
+  //             children: <Widget>[
+  //               Text(
+  //                 "LEVEL 3",
+  //                 style: TextStyle(
+  //                     color: Color(0xff6FCF97),
+  //                     fontSize: 26.0,
+  //                     fontWeight: FontWeight.w500),
+  //               ),
+  //             ],
+  //           ))
+  //     ],
+  //   );
+  // }
 }

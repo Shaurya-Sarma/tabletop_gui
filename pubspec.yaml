@@ -57,6 +57,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/tabletop_logo.png
     - assets/images/download.jpg
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
@@ -120,6 +121,10 @@ flutter:
     - assets/audio/pickup_fruit.mp3
     - assets/audio/snake_death.mp3
     - assets/audio/snake_music.mp3
+    - assets/audio/fifteen_tile_slide.mp3
+    - assets/audio/playcard.mp3
+    - assets/audio/shuffle.mp3
+    - assets/audio/game_win.mp3
 
     - assets/images/apple_sprite.png
     - assets/images/snake_sprites/snake-tail-right.png
@@ -130,14 +135,14 @@ flutter:
     - assets/images/snake_sprites/snake-head-left.png
     - assets/images/snake_sprites/snake-head-down.png
     - assets/images/snake_sprites/snake-head-up.png
-    - assets/images/snake_sprites/snake-body-horizontal.png
-    - assets/images/snake_sprites/snake-body-vertical.png
+    - assets/images/snake_sprites/snake-body-down.png
+    - assets/images/snake_sprites/snake-body-up.png
+    - assets/images/snake_sprites/snake-body-right.png
+    - assets/images/snake_sprites/snake-body-left.png
     - assets/images/snake_sprites/snake-corner-ld.png
     - assets/images/snake_sprites/snake-corner-lu.png
     - assets/images/snake_sprites/snake-corner-rd.png
     - assets/images/snake_sprites/snake-corner-ru.png
-
-    - assets/audio/fifteen_tile_slide.mp3
       # An image asset can vvvvvvvvvvvvvvvvvv to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

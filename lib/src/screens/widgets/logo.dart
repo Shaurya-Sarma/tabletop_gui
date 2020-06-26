@@ -5,10 +5,9 @@ class TabletopLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 35.0),
-      child: Text(
-        "TABLETOP",
-        style: TextStyle(
-            fontSize: 42.0, color: Colors.white, fontWeight: FontWeight.bold),
+      child: Image.asset(
+        "assets/images/tabletop_logo.png",
+        height: 60,
       ),
     );
   }

@@ -116,10 +116,11 @@ class _RegisterFormState extends State<RegisterForm> {
       ),
       onPressed: () {
         if (_bloc.validateFields()) {
-          _bloc.registerWithEmail();
-          Navigator.pushNamed(context, '/login');
-          ToastUtils.showToast(
-              context, "User Successfully Created!", Colors.green[300]);
+          _bloc.registerWithEmail().then((value) {
+            Navigator.pushNamed(context, '/login');
+            ToastUtils.showToast(
+                context, "User Successfully Created!", Colors.green[300]);
+          }).catchError((err) => showErrorMessage());
         } else {
           showErrorMessage();
         }

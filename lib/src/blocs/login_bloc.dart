@@ -72,16 +72,16 @@ class LoginBloc extends BaseBloc {
     }
   }
 
-  void loginWithEmail() {
-    repository.loginWithEmail(_email.value, _password.value);
+  Future<void> loginWithEmail() {
+    return repository.loginWithEmail(_email.value, _password.value);
   }
 
-  void loginWithGoogle() {
-    repository.loginWithGoogle();
+  Future<void> loginWithGoogle() {
+    return repository.loginWithGoogle();
   }
 
-  void registerWithEmail() {
-    repository.registerWithEmail(
+  Future<void> registerWithEmail() {
+    return repository.registerWithEmail(
         _email.value, _password.value, _username.value);
   }
 

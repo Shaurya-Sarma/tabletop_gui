@@ -45,7 +45,7 @@ class ToastUtils {
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 18.0,
-                          fontWeight: FontWeight.w400),
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),

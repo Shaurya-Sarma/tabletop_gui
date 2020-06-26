@@ -52,7 +52,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
     _stopwatch.stop();
   }
 
-  void resestGame() {
+  void resetGame() {
     _stopwatch.reset();
     timerDisplay = "00:00:00";
     numberOfMoves = 0;
@@ -65,9 +65,9 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
         int clickedTileNumber = _bloc.tileNumbers[index];
         _bloc.tileNumbers[index] = 16;
         _bloc.tileNumbers[emptyTileIndex] = clickedTileNumber;
-        // AudioManager.playSound("fifteen_tile_slide.mp3", 1.1);
         numberOfMoves += 1;
       });
+      AudioManager.playSound("fifteen_tile_slide.mp3", 2.0);
       checkWin();
     }
   }
@@ -141,6 +141,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
       padding: EdgeInsets.only(bottom: 30.0),
       child: GestureDetector(
           onTap: () {
+            pauseStopwatch();
             Navigator.pop(context);
           },
           child: Icon(
@@ -194,7 +195,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
         borderRadius: BorderRadius.circular(10.0),
         child: Container(
           color: _bloc.tileNumbers[number] == number + 1
-              ? Colors.green[300]
+              ? Colors.teal[600]
               : Colors.brown[100],
           height: 400 / 4,
           child: Center(
@@ -215,28 +216,42 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
     return ButtonBar(
       alignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        IconButton(
-            icon: Icon(Icons.play_arrow),
-            splashColor: Colors.green[400],
-            iconSize: 30.0,
-            onPressed: () {
-              startStopwatch();
-            }),
-        IconButton(
-            icon: Icon(Icons.pause),
-            splashColor: Colors.red[600],
-            iconSize: 30.0,
-            onPressed: () {
-              pauseStopwatch();
-            }),
+        MaterialButton(
+          onPressed: () {
+            startStopwatch();
+          },
+          color: Colors.blue,
+          textColor: Colors.white,
+          child: Icon(
+            Icons.play_arrow,
+            size: 20,
+          ),
+          padding: EdgeInsets.all(14),
+          shape: CircleBorder(),
+        ),
+        MaterialButton(
+          onPressed: () {
+            pauseStopwatch();
+          },
+          color: Colors.blue,
+          textColor: Colors.white,
+          child: Icon(
+            Icons.pause,
+            size: 20,
+          ),
+          padding: EdgeInsets.all(14),
+          shape: CircleBorder(),
+        ),
         RaisedButton(
-          child: Text("New Puzzle", style: TextStyle(color: Colors.white)),
-          color: Colors.amber[600],
+          child: Text("New Puzzle",
+              style: TextStyle(color: Colors.white, fontSize: 18.0)),
+          color: Colors.teal,
+          padding: EdgeInsets.all(12),
           onPressed: () {
             setState(() {
               _bloc.tileNumbers.shuffle();
             });
-            resestGame();
+            resetGame();
             pauseStopwatch();
           },
         )
@@ -257,7 +272,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
               child: Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
-                resestGame();
+                resetGame();
               },
             ),
           ],

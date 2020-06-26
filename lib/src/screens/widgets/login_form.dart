@@ -119,16 +119,12 @@ class _LoginFormState extends State<LoginForm> {
       ),
       onPressed: () {
         if (_bloc.validateFields()) {
-          loginUser();
+          _bloc.loginWithEmail().catchError((err) => showErrorMessage());
         } else {
           showErrorMessage();
         }
       },
     );
-  }
-
-  void loginUser() {
-    _bloc.loginWithEmail();
   }
 
   Widget connectWithDivider() {

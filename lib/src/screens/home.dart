@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 
 import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/screens/widgets/logo.dart';
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _children() => <Widget>[
         ProfileScreen(user: widget.user),
         GamesScreen(),
-        SettingsScreen(),
+        LoginBlocProvider(child: SettingsScreen()),
       ];
 
   void _onItemTapped(int index) {

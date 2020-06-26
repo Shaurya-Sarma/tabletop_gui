@@ -28,4 +28,6 @@ class StringConstant {
 
   static const String warStartErrorMessage =
       "Need Two Players To Start. Invite A Friend!";
+  static const String warJoinErrorMessage =
+      "Could Not Join Game. Please Enter A Valid Code.";
 }

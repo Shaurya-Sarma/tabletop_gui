@@ -8,16 +8,17 @@ class SnakeGameBloc {
   static int tilesPerRow = 15;
 
   static Random randomPos = Random();
-  int foodPos =
-      randomPos.nextInt(numOfTiles - tilesPerRow); //! NEEDS TO FIX EXTRA ROW
+  int foodPos = randomPos.nextInt(numOfTiles - tilesPerRow);
   void generateFruitPos() {
     foodPos = randomPos.nextInt(numOfTiles - tilesPerRow);
   }
 
-  // static int snakeStartingPoint =
-  //     14 * ((numOfTiles ~/ tilesPerRow) ~/ 2) + (tilesPerRow ~/ 2);
-
-  List<int> snakeCellPos = [197, 198, 199, 200];
+  List<List<dynamic>> snakeCellPos = [
+    [197, 'right'],
+    [198, 'right'],
+    [199, 'right'],
+    [200, 'right']
+  ];
 
   Duration tickSpeed = Duration(milliseconds: 300);
 
@@ -25,41 +26,43 @@ class SnakeGameBloc {
   void moveSnake() {
     switch (snakeDirection) {
       case "right":
-        if ((snakeCellPos.last + 1) % tilesPerRow == 0) {
-          snakeCellPos.add(snakeCellPos.last + 1 - tilesPerRow);
+        if ((snakeCellPos.last[0] + 1) % tilesPerRow == 0) {
+          snakeCellPos.add([snakeCellPos.last[0] + 1 - tilesPerRow, 'right']);
         } else {
-          snakeCellPos.add(snakeCellPos.last + 1);
+          snakeCellPos.add([snakeCellPos.last[0] + 1, 'right']);
         }
         break;
 // ----------------------------------------------------------------------------------
       case "up":
-        if (snakeCellPos.last < tilesPerRow) {
-          snakeCellPos.add(snakeCellPos.last + numOfTiles - tilesPerRow);
+        if (snakeCellPos.last[0] < tilesPerRow) {
+          snakeCellPos
+              .add([snakeCellPos.last[0] + numOfTiles - tilesPerRow, "up"]);
         } else {
-          snakeCellPos.add(snakeCellPos.last - tilesPerRow);
+          snakeCellPos.add([snakeCellPos.last[0] - tilesPerRow, "up"]);
         }
         break;
 // ----------------------------------------------------------------------------------
       case "down":
-        if (snakeCellPos.last > (numOfTiles - tilesPerRow)) {
-          snakeCellPos.add(snakeCellPos.last + tilesPerRow - numOfTiles);
+        if (snakeCellPos.last[0] > (numOfTiles - tilesPerRow)) {
+          snakeCellPos
+              .add([snakeCellPos.last[0] + tilesPerRow - numOfTiles, "down"]);
         } else {
-          snakeCellPos.add(snakeCellPos.last + tilesPerRow);
+          snakeCellPos.add([snakeCellPos.last[0] + tilesPerRow, "down"]);
         }
         break;
 // ----------------------------------------------------------------------------------
       case "left":
-        if (snakeCellPos.last % tilesPerRow == 0) {
-          snakeCellPos.add(snakeCellPos.last + tilesPerRow - 1);
+        if (snakeCellPos.last[0] % tilesPerRow == 0) {
+          snakeCellPos.add([snakeCellPos.last[0] + tilesPerRow - 1, "left"]);
         } else {
-          snakeCellPos.add(snakeCellPos.last - 1);
+          snakeCellPos.add([snakeCellPos.last[0] - 1, "left"]);
         }
         break;
 // ----------------------------------------------------------------------------------
       default:
     }
 
-    if (snakeCellPos.last == foodPos) {
+    if (snakeCellPos.last[0] == foodPos) {
       generateFruitPos();
       AudioManager.playSound("pickup_fruit.mp3", 1.2);
     } else {
@@ -87,7 +90,7 @@ class SnakeGameBloc {
     for (int i = 0; i < snakeCellPos.length; i++) {
       int counter = 0;
       for (int j = 0; j < snakeCellPos.length; j++) {
-        if (snakeCellPos[i] == snakeCellPos[j]) {
+        if (snakeCellPos[i][0] == snakeCellPos[j][0]) {
           counter += 1;
         }
         if (counter == 2) {

@@ -8,6 +8,7 @@ import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/models/war_game.dart';
 import 'package:tabletop_gui/src/utils/toast_utils.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
+import 'package:tabletop_gui/src/utils/audio_manager.dart';
 
 class BoardScreen extends StatefulWidget {
   final String gameCode;
@@ -187,8 +188,7 @@ class _BoardScreenState extends State<BoardScreen> {
                   ),
                 ]);
           } else {
-            return Text("Loading Board...",
-                style: TextStyle(color: Colors.white));
+            return Container();
           }
         });
   }
@@ -275,10 +275,7 @@ class _BoardScreenState extends State<BoardScreen> {
                   playerTwo()
                 ]);
           } else {
-            return Text(
-              "Loading Board...",
-              style: TextStyle(color: Colors.white),
-            );
+            return Container();
           }
         });
   }
@@ -289,6 +286,7 @@ class _BoardScreenState extends State<BoardScreen> {
     if (myTurn && _user.email == game.players[playerNumber]["email"]) {
       _bloc.playerMove(playerNumber, game);
     }
+    AudioManager.playSound("playcard.mp3", 1.2);
   }
 
   Widget playerTwo() {
@@ -375,6 +373,7 @@ class _BoardScreenState extends State<BoardScreen> {
                     ),
                     onPressed: () {
                       if (game.players.length == 2) {
+                        AudioManager.playSound("shuffle.mp3", 1.2);
                         _bloc.initGame();
                       } else {
                         showErrorMessage(context);
@@ -401,7 +400,13 @@ class _BoardScreenState extends State<BoardScreen> {
               ],
             );
           } else {
-            return Text("Please Wait...");
+            return Text(
+              "Loading Board. Please Wait...",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500),
+            );
           }
         });
   }
@@ -416,6 +421,7 @@ class _BoardScreenState extends State<BoardScreen> {
           : ToastUtils.showToast(context, "Tiebreaker Round!", Colors.blue);
       int gameWinner = _bloc.checkGameOver(game, wg);
       if (gameWinner >= 0) {
+        AudioManager.playSound("game_win.mp3", 1.2);
         _showEndScreen(gameWinner);
       }
     }
@@ -447,7 +453,7 @@ class _BoardScreenState extends State<BoardScreen> {
                   ],
                 );
               } else {
-                return AlertDialog(content: Text("Loading..."));
+                return Container();
               }
             });
       },

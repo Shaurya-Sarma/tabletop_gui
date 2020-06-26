@@ -10,12 +10,13 @@ class Repository {
 
   final _firestoreProvider = FirestoreProvider();
 
-  void loginWithEmail(String email, String password) =>
+  Future<void> loginWithEmail(String email, String password) =>
       _firestoreProvider.loginWithEmail(email, password);
 
   void loginWithGoogle() => _firestoreProvider.loginWithGoogle();
 
-  void registerWithEmail(String email, String password, String username) =>
+  Future<void> registerWithEmail(
+          String email, String password, String username) =>
       _firestoreProvider.registerWithEmail(email, password, username);
 
   void sendPasswordResetEmail(String email) =>

@@ -17,17 +17,19 @@ class FirestoreProvider {
   Stream<Game> get currentGame => _currentGame.stream;
 
   // User Login With Email & Password
-  void loginWithEmail(String email, String password) async {
-    try {
-      FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-              email: email, password: password))
-          .user;
-      _currentUser.sink.add(
-          User(user.uid, user.displayName, user.email, user.photoUrl, null));
-    } catch (e) {
-      print(e.message);
-      throw e;
-    }
+  Future<void> loginWithEmail(String email, String password) async {
+    FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+            email: email, password: password))
+        .user;
+
+    QuerySnapshot userInstance = await _firestore
+        .collection("users")
+        .where("email", isEqualTo: user.email)
+        .getDocuments();
+    Map currentUser = userInstance.documents.first.data;
+
+    _currentUser.sink.add(User(currentUser["uid"], currentUser["displayName"],
+        currentUser["email"], currentUser["photoUrl"], null));
   }
 
   // User Sign In With Google Account
@@ -62,25 +64,21 @@ class FirestoreProvider {
   }
 
   // Register User With Email & Password
-  void registerWithEmail(String email, String password, String username) async {
-    try {
-      FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-              email: email, password: password))
-          .user;
+  Future<void> registerWithEmail(
+      String email, String password, String username) async {
+    FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+            email: email, password: password))
+        .user;
 
-      user.sendEmailVerification();
+    user.sendEmailVerification();
 
-      _firestore.collection("users").document(user.uid).setData({
-        'displayName': username,
-        'email': email,
-        'photoUrl':
-            'https://lh3.googleusercontent.com/4ChWnbUKurKdzUWVFlAPqGH9dzlUm9oAH8E4VxHwpW79MPeOY8HQOrkGG-KBVdaZVA=w300',
-        'friends': null,
-      });
-    } catch (e) {
-      print(e.message);
-      throw e;
-    }
+    _firestore.collection("users").document(user.uid).setData({
+      'displayName': username,
+      'email': email,
+      'photoUrl':
+          'https://lh3.googleusercontent.com/4ChWnbUKurKdzUWVFlAPqGH9dzlUm9oAH8E4VxHwpW79MPeOY8HQOrkGG-KBVdaZVA=w300',
+      'friends': null,
+    });
   }
 
   // Send User Password Reset Mail
@@ -108,15 +106,19 @@ class FirestoreProvider {
         .where("uid", isEqualTo: "$userJoinCode")
         .getDocuments();
 
-    gameInstance.documents.forEach((doc) async {
-      DocumentSnapshot document = await doc.reference.get();
-      List<dynamic> players = document.data['players'];
+    if (gameInstance.documents.any((element) => element.exists)) {
+      gameInstance.documents.forEach((doc) async {
+        DocumentSnapshot document = await doc.reference.get();
+        List<dynamic> players = document.data['players'];
 
-      players.add(_currentUser.value.toJson());
-      doc.reference.updateData({
-        'players': players,
+        players.add(_currentUser.value.toJson());
+        doc.reference.updateData({
+          'players': players,
+        });
       });
-    });
+    } else {
+      return 'false';
+    }
 
     return userJoinCode;
   }

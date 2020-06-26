@@ -134,8 +134,9 @@ class _LobbyScreenState extends State<LobbyScreen> {
                   stream: _bloc.userJoinCode,
                   builder: (context, snapshot) {
                     return TextField(
-                      decoration:
-                          InputDecoration(hintText: "Enter A Game Code"),
+                      decoration: InputDecoration(
+                          hintText: "Enter A Game Code",
+                          errorText: snapshot.error),
                       onChanged: _bloc.changeUserJoinCode,
                       keyboardType: TextInputType.text,
                     );
@@ -151,13 +152,20 @@ class _LobbyScreenState extends State<LobbyScreen> {
                 FlatButton(
                   child: Text('JOIN', style: TextStyle(color: Colors.green)),
                   onPressed: () {
-                    _bloc.joinPrivateGame().then((value) => Navigator.push(
-                            context, MaterialPageRoute(builder: (context) {
-                          return WarBoardBlocProvider(
-                              child: BoardScreen(
-                            gameCode: value,
-                          ));
-                        })));
+                    _bloc.joinPrivateGame().then((value) => {
+                          if (value == "false")
+                            {print("Error Joining")}
+                          else
+                            {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return WarBoardBlocProvider(
+                                    child: BoardScreen(
+                                  gameCode: value,
+                                ));
+                              }))
+                            }
+                        });
                   },
                 )
               ],

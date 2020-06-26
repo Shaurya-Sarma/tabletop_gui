@@ -27,13 +27,16 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
   bool isGameActive = false;
 
   void gameManager() {
-    AudioManager.playLoop("snake_music.mp3", 0.8);
-    _bloc.snakeCellPos = [197, 198, 199, 200];
+    _bloc.snakeCellPos = [
+      [197, 'right'],
+      [198, 'right'],
+      [199, 'right'],
+      [200, 'right']
+    ];
     isGameActive = true;
     Timer.periodic(_bloc.tickSpeed, (timer) {
       updateSnakePos();
       if (_bloc.isGameOver()) {
-        AudioManager.stopFile();
         isGameActive = false;
         timer.cancel();
         _showEndDialog();
@@ -159,94 +162,23 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
     //       child: Container(
     //         color: Colors.blue,
     //       ));
-    if (_bloc.snakeCellPos.last == index) {
-      switch (_bloc.snakeDirection) {
-        case "down":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-head-down.png"),
-          );
-          break;
-
-        case "up":
-          return Image(
-            image: AssetImage("assets/images/snake_sprites/snake-head-up.png"),
-          );
-          break;
-
-        case "right":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-head-right.png"),
-          );
-          break;
-
-        case "left":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-head-left.png"),
-          );
-          break;
-      }
-    } else if (_bloc.snakeCellPos.first == index) {
-      switch (_bloc.snakeDirection) {
-        case "down":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-tail-down.png"),
-          );
-          break;
-
-        case "up":
-          return Image(
-            image: AssetImage("assets/images/snake_sprites/snake-tail-up.png"),
-          );
-          break;
-
-        case "right":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-tail-right.png"),
-          );
-          break;
-
-        case "left":
-          return Image(
-            image:
-                AssetImage("assets/images/snake_sprites/snake-tail-left.png"),
-          );
-          break;
-      }
-    } else if (_bloc.snakeCellPos.contains(index)) {
-      switch (_bloc.snakeDirection) {
-        case "down":
-          return Image(
-            image: AssetImage(
-                "assets/images/snake_sprites/snake-body-vertical.png"),
-          );
-          break;
-
-        case "up":
-          return Image(
-            image: AssetImage(
-                "assets/images/snake_sprites/snake-body-vertical.png"),
-          );
-          break;
-
-        case "right":
-          return Image(
-            image: AssetImage(
-                "assets/images/snake_sprites/snake-body-horizontal.png"),
-          );
-          break;
-
-        case "left":
-          return Image(
-            image: AssetImage(
-                "assets/images/snake_sprites/snake-body-horizontal.png"),
-          );
-          break;
-      }
+    if (_bloc.snakeCellPos.last[0] == index) {
+      return Image(
+        image: AssetImage(
+            "assets/images/snake_sprites/snake-head-${_bloc.snakeCellPos.last[1]}.png"),
+      );
+    } else if (_bloc.snakeCellPos.first[0] == index) {
+      return Image(
+        image: AssetImage(
+            "assets/images/snake_sprites/snake-tail-${_bloc.snakeCellPos.first[1]}.png"),
+      );
+    } else if (_bloc.snakeCellPos.any((element) => element.contains(index))) {
+      int snakeBodyPos =
+          _bloc.snakeCellPos.indexWhere((element) => element[0] == index);
+      return Image(
+        image: AssetImage(
+            "assets/images/snake_sprites/snake-body-${_bloc.snakeCellPos[snakeBodyPos][1]}.png"),
+      );
     } else {
       return Container();
     }
