@@ -31,13 +31,15 @@ class WelcomeScreen extends StatelessWidget {
             )));
   }
 
+  //  colorFilter: ColorFilter.mode(
+  //               Color(0xff00B16A).withOpacity(0.6), BlendMode.srcATop)
+
   Decoration backgroundImage() {
     return BoxDecoration(
         image: DecorationImage(
-            image: AssetImage('assets/images/download.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-                Color(0xff00B16A).withOpacity(0.6), BlendMode.srcATop)));
+      image: AssetImage('assets/images/background.jpg'),
+      fit: BoxFit.cover,
+    ));
   }
 
   Widget signUpButton(BuildContext context) {
@@ -66,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
           child: Text(
             StringConstant.loginButtonLabel,
             style: TextStyle(
-                color: Color(0xff00B16A),
+                color: Colors.black,
                 fontWeight: FontWeight.w500,
                 fontSize: 24.0),
           ),

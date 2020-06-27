@@ -155,30 +155,11 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
   }
 
   Widget addSnake(int index) {
-    // if (_bloc.snakeCellPos.last == index) {
-    //   return ClipRRect(
-    //       borderRadius:
-    //           BorderRadius.horizontal(right: Radius.elliptical(20.0, 20.0)),
-    //       child: Container(
-    //         color: Colors.blue,
-    //       ));
-    if (_bloc.snakeCellPos.last[0] == index) {
-      return Image(
-        image: AssetImage(
-            "assets/images/snake_sprites/snake-head-${_bloc.snakeCellPos.last[1]}.png"),
-      );
-    } else if (_bloc.snakeCellPos.first[0] == index) {
-      return Image(
-        image: AssetImage(
-            "assets/images/snake_sprites/snake-tail-${_bloc.snakeCellPos.first[1]}.png"),
-      );
-    } else if (_bloc.snakeCellPos.any((element) => element.contains(index))) {
-      int snakeBodyPos =
-          _bloc.snakeCellPos.indexWhere((element) => element[0] == index);
-      return Image(
-        image: AssetImage(
-            "assets/images/snake_sprites/snake-body-${_bloc.snakeCellPos[snakeBodyPos][1]}.png"),
-      );
+    if (_bloc.snakeCellPos.any((element) => element[0] == index)) {
+      return ClipRRect(
+          child: Container(
+        color: Colors.blue,
+      ));
     } else {
       return Container();
     }

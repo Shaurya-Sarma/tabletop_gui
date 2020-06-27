@@ -34,19 +34,27 @@ class _LobbyScreenState extends State<LobbyScreen> {
         body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 25.0),
                   child: appHeader(),
                 ),
-                createGameButton(),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.0),
-                  child: joinGameButton(),
-                ),
-                Center(
-                  child: gameRulesLink(),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      createGameButton(),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 40.0, top: 50.0),
+                        child: joinGameButton(),
+                      ),
+                      Center(
+                        child: gameRulesLink(),
+                      )
+                    ],
+                  ),
                 )
               ],
             )));
@@ -99,80 +107,90 @@ class _LobbyScreenState extends State<LobbyScreen> {
   // }
 
   Widget createGameButton() {
-    return RaisedButton(
-      child: Text(
-        "Create Private Game",
-        style: TextStyle(color: Colors.white, fontSize: 18.0),
+    return SizedBox(
+      width: 275,
+      height: 55,
+      child: RaisedButton(
+        child: Text(
+          "Create Private Game",
+          style: TextStyle(color: Colors.white, fontSize: 22.0),
+        ),
+        color: Color(0xffEB5757),
+        shape: StadiumBorder(),
+        onPressed: () {
+          _bloc.createPrivateGame().then((value) =>
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return WarBoardBlocProvider(
+                    child: BoardScreen(
+                  gameCode: value,
+                ));
+              })));
+        },
       ),
-      color: Color(0xffEB5757),
-      onPressed: () {
-        _bloc.createPrivateGame().then((value) =>
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
-              return WarBoardBlocProvider(
-                  child: BoardScreen(
-                gameCode: value,
-              ));
-            })));
-      },
     );
   }
 
   Widget joinGameButton() {
-    return RaisedButton(
-      child: Text(
-        "Join Private Game",
-        style: TextStyle(color: Colors.white, fontSize: 18.0),
+    return SizedBox(
+      width: 275,
+      height: 55,
+      child: RaisedButton(
+        child: Text(
+          "Join Private Game",
+          style: TextStyle(color: Colors.white, fontSize: 22.0),
+        ),
+        color: Color(0xff2F80ED),
+        shape: StadiumBorder(),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Join Private Game'),
+                content: StreamBuilder(
+                    stream: _bloc.userJoinCode,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        decoration: InputDecoration(
+                            hintText: "Enter A Game Code",
+                            errorText: snapshot.error),
+                        onChanged: _bloc.changeUserJoinCode,
+                        keyboardType: TextInputType.text,
+                      );
+                    }),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('CANCEL',
+                        style: TextStyle(color: Colors.redAccent)),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('JOIN', style: TextStyle(color: Colors.green)),
+                    onPressed: () {
+                      _bloc.joinPrivateGame().then((value) => {
+                            if (value == "false")
+                              {print("Error Joining")}
+                            else
+                              {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return WarBoardBlocProvider(
+                                      child: BoardScreen(
+                                    gameCode: value,
+                                  ));
+                                }))
+                              }
+                          });
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        },
       ),
-      color: Color(0xff2F80ED),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Join Private Game'),
-              content: StreamBuilder(
-                  stream: _bloc.userJoinCode,
-                  builder: (context, snapshot) {
-                    return TextField(
-                      decoration: InputDecoration(
-                          hintText: "Enter A Game Code",
-                          errorText: snapshot.error),
-                      onChanged: _bloc.changeUserJoinCode,
-                      keyboardType: TextInputType.text,
-                    );
-                  }),
-              actions: <Widget>[
-                FlatButton(
-                  child:
-                      Text('CANCEL', style: TextStyle(color: Colors.redAccent)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
-                  child: Text('JOIN', style: TextStyle(color: Colors.green)),
-                  onPressed: () {
-                    _bloc.joinPrivateGame().then((value) => {
-                          if (value == "false")
-                            {print("Error Joining")}
-                          else
-                            {
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return WarBoardBlocProvider(
-                                    child: BoardScreen(
-                                  gameCode: value,
-                                ));
-                              }))
-                            }
-                        });
-                  },
-                )
-              ],
-            );
-          },
-        );
-      },
     );
   }
 

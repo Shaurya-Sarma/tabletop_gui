@@ -26,22 +26,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget userGreeting() {
-    return RichText(
-      softWrap: true,
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: "Hello, ",
+    return Column(
+      children: <Widget>[
+        Text(
+          "Hello!",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w500,
             fontSize: 40.0,
           ),
-          children: <TextSpan>[
-            TextSpan(
-              text: "${widget.user.displayName}",
-              style: TextStyle(color: Color(0xff2F80ED)),
-            ),
-          ]),
+        ),
+        Text(
+          "${widget.user.displayName}",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+            fontSize: 40.0,
+          ),
+        ),
+      ],
     );
   }
 

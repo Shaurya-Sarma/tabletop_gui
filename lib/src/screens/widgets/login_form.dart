@@ -34,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(bottom: 20.0),
@@ -62,11 +62,13 @@ class _LoginFormState extends State<LoginForm> {
             child: loginButton(),
           ),
           Padding(
-              padding: EdgeInsets.only(top: 40.0, bottom: 10.0),
+              padding: EdgeInsets.only(top: 50.0, bottom: 10.0),
               child: connectWithDivider()),
           ButtonBar(
             alignment: MainAxisAlignment.center,
-            children: <Widget>[googleAuthButton(), facebookAuthButton()],
+            children: <Widget>[
+              googleAuthButton(),
+            ],
           ),
         ]);
   }
@@ -159,13 +161,6 @@ class _LoginFormState extends State<LoginForm> {
       onPressed: () {
         _bloc.loginWithGoogle();
       },
-    );
-  }
-
-  Widget facebookAuthButton() {
-    return SignInButton(
-      Buttons.Facebook,
-      onPressed: () {},
     );
   }
 

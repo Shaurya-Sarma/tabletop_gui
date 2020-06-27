@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
 import 'package:tabletop_gui/src/models/game.dart';
@@ -112,10 +111,6 @@ class _BoardScreenState extends State<BoardScreen> {
                 _bloc.endGame(game);
                 _bloc.exitGame(gameCode);
                 Navigator.pop(context);
-                SystemChrome.setPreferredOrientations([
-                  DeviceOrientation.portraitUp,
-                  DeviceOrientation.portraitDown,
-                ]);
               },
             );
           } else {
@@ -284,9 +279,9 @@ class _BoardScreenState extends State<BoardScreen> {
     bool myTurn = playerNumber == 0 && wg.playerOneTurn ||
         playerNumber == 1 && !wg.playerOneTurn;
     if (myTurn && _user.email == game.players[playerNumber]["email"]) {
+      AudioManager.playSound("playcard.mp3", 1.2);
       _bloc.playerMove(playerNumber, game);
     }
-    AudioManager.playSound("playcard.mp3", 1.2);
   }
 
   Widget playerTwo() {
