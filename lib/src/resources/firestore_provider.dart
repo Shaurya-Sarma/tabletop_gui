@@ -18,67 +18,90 @@ class FirestoreProvider {
 
   // User Login With Email & Password
   Future<void> loginWithEmail(String email, String password) async {
-    FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-            email: email, password: password))
-        .user;
+    try {
+      FirebaseUser user = (await _auth.signInWithEmailAndPassword(
+              email: email, password: password))
+          .user;
 
-    QuerySnapshot userInstance = await _firestore
-        .collection("users")
-        .where("email", isEqualTo: user.email)
-        .getDocuments();
-    Map currentUser = userInstance.documents.first.data;
+      QuerySnapshot userInstance = await _firestore
+          .collection("users")
+          .where("email", isEqualTo: user.email)
+          .getDocuments();
+      Map currentUser = userInstance.documents.first.data;
 
-    _currentUser.sink.add(User(currentUser["uid"], currentUser["displayName"],
-        currentUser["email"], currentUser["photoUrl"], null));
+      _currentUser.sink.add(User(currentUser["uid"], currentUser["displayName"],
+          currentUser["email"], currentUser["photoUrl"], null));
+    } catch (e) {
+      print(e.message);
+      throw e;
+    }
   }
 
   // User Sign In With Google Account
   void loginWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+    try {
+      final GoogleSignInAccount googleSignInAccount =
+          await googleSignIn.signIn();
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
 
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
+      final AuthResult authResult =
+          await _auth.signInWithCredential(credential);
+      final FirebaseUser user = authResult.user;
 
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
+      final FirebaseUser currentUser = await _auth.currentUser();
+      assert(user.uid == currentUser.uid);
 
-    _firestore.collection("users").document(currentUser.uid).setData({
-      'displayName': currentUser.displayName,
-      'email': currentUser.email,
-      'photoUrl': currentUser.photoUrl,
-      'friends': null,
-    });
+      _firestore.collection("users").document(currentUser.uid).setData({
+        'displayName': currentUser.displayName,
+        'email': currentUser.email,
+        'photoUrl': currentUser.photoUrl,
+        'friends': null,
+      });
 
-    _currentUser.sink
-        .add(User(user.uid, user.displayName, user.email, user.photoUrl, null));
+      _currentUser.sink.add(
+          User(user.uid, user.displayName, user.email, user.photoUrl, null));
+    } catch (e) {
+      print(e.message);
+      throw e;
+    }
+  }
+
+  Future<void> userLogout() async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
+    _currentUser.sink.add(User(null, null, null, null, null));
   }
 
   // Register User With Email & Password
   Future<void> registerWithEmail(
       String email, String password, String username) async {
-    FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
-            email: email, password: password))
-        .user;
+    try {
+      FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+              email: email, password: password))
+          .user;
 
-    user.sendEmailVerification();
+      user.sendEmailVerification();
 
-    _firestore.collection("users").document(user.uid).setData({
-      'displayName': username,
-      'email': email,
-      'photoUrl':
-          'https://lh3.googleusercontent.com/4ChWnbUKurKdzUWVFlAPqGH9dzlUm9oAH8E4VxHwpW79MPeOY8HQOrkGG-KBVdaZVA=w300',
-      'friends': null,
-    });
+      _firestore.collection("users").document(user.uid).setData({
+        'displayName': username,
+        'email': email,
+        'photoUrl':
+            'https://lh3.googleusercontent.com/4ChWnbUKurKdzUWVFlAPqGH9dzlUm9oAH8E4VxHwpW79MPeOY8HQOrkGG-KBVdaZVA=w300',
+        'friends': null,
+      });
+    } catch (e) {
+      print(e.message);
+      throw e;
+    }
   }
 
   // Send User Password Reset Mail

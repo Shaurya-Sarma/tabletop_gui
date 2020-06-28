@@ -80,6 +80,10 @@ class LoginBloc extends BaseBloc {
     return repository.loginWithGoogle();
   }
 
+  Future<void> userLogout() {
+    return repository.userLogout();
+  }
+
   Future<void> registerWithEmail() {
     return repository.registerWithEmail(
         _email.value, _password.value, _username.value);

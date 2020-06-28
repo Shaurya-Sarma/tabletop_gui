@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 import 'package:tabletop_gui/src/screens/login.dart';
@@ -27,11 +25,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> userLogout() async {
-    _bloc.currentUser().drain();
-    await GoogleSignIn().signOut();
-    await FirebaseAuth.instance.signOut();
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    _bloc.userLogout().then((value) => Navigator.push(
+        context, MaterialPageRoute(builder: (context) => LoginScreen())));
   }
 
   @override

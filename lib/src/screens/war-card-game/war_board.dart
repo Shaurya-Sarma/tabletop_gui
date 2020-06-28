@@ -407,7 +407,6 @@ class _BoardScreenState extends State<BoardScreen> {
   }
 
   void checkWinner(WarGame wg, Game game) {
-    print("checkingwinner");
     if (wg != null && wg.turnCounter == 2) {
       _bloc.calculateWinner(game);
       wg != null && wg.winner != null && wg.winner >= 0

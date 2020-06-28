@@ -20,8 +20,10 @@ class _LoginFormState extends State<LoginForm> {
     super.didChangeDependencies();
     _bloc = LoginBlocProvider.of(context);
     _bloc.currentUser().listen((event) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => HomeScreen(user: event)));
+      if (event.email != null) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => HomeScreen(user: event)));
+      }
     });
   }
 
@@ -161,7 +163,7 @@ class _LoginFormState extends State<LoginForm> {
     return SignInButton(
       Buttons.GoogleDark,
       onPressed: () {
-        _bloc.loginWithGoogle();
+        _bloc.loginWithGoogle().catchError((err) => showErrorMessage());
       },
     );
   }

@@ -120,7 +120,9 @@ class _RegisterFormState extends State<RegisterForm> {
             Navigator.pushNamed(context, '/login');
             ToastUtils.showToast(
                 context, "User Successfully Created!", Colors.green);
-          }).catchError((err) => showErrorMessage());
+          }).catchError((e) {
+            showErrorMessage();
+          });
         } else {
           showErrorMessage();
         }

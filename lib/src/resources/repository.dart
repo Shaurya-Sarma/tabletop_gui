@@ -15,6 +15,8 @@ class Repository {
 
   void loginWithGoogle() => _firestoreProvider.loginWithGoogle();
 
+  Future<void> userLogout() => _firestoreProvider.userLogout();
+
   Future<void> registerWithEmail(
           String email, String password, String username) =>
       _firestoreProvider.registerWithEmail(email, password, username);
