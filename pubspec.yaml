@@ -22,7 +22,6 @@ environment:
 
 dependencies:
   flutter_signin_button: 1.0.0
-  http: ^0.12.1
   firebase_auth: ^0.16.0
   google_sign_in: ^4.5.1
   url_launcher: ^5.4.10
@@ -33,6 +32,7 @@ dependencies:
   audioplayers: ^0.15.1
   flutter_timer: ^0.0.6
   simple_animations: ^2.2.1
+  flutter_launcher_icons: ^0.7.5
 
   flutter:
     sdk: flutter
@@ -47,6 +47,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/tabletop_icon.png"
+  adaptive_icon_background: "#3f7fa1"
 
 # The following section is specific to Flutter.
 flutter:
@@ -59,7 +64,6 @@ flutter:
   assets:
     - assets/images/tabletop_logo.png
     - assets/images/background.jpg
-    - assets/images/wallpaper.jpg
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
     - assets/images/fifteen_puzzle_thumbnail.jpg

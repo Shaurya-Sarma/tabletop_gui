@@ -129,11 +129,11 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Game Over!"),
-          content: new Text("Your Score Was ${_bloc.snakeCellPos.length - 4}"),
+          title: Text("Game Over!"),
+          content: Text("Your Score Was ${_bloc.snakeCellPos.length - 4}"),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Close"),
+              child: Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -158,7 +158,7 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
     if (_bloc.snakeCellPos.any((element) => element[0] == index)) {
       return ClipRRect(
           child: Container(
-        color: Colors.blue,
+        color: Colors.blue[700],
       ));
     } else {
       return Container();

@@ -121,7 +121,9 @@ class _LoginFormState extends State<LoginForm> {
       ),
       onPressed: () {
         if (_bloc.validateFields()) {
-          _bloc.loginWithEmail().catchError((err) => showErrorMessage());
+          _bloc.loginWithEmail().catchError((err) {
+            showErrorMessage();
+          });
         } else {
           showErrorMessage();
         }
