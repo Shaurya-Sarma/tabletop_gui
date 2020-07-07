@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:tabletop_gui/src/screens/widgets/logo.dart';
+import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
+import 'package:tabletop_gui/src/screens/login.dart';
+
 import 'package:tabletop_gui/src/utils/strings.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -73,7 +76,13 @@ class WelcomeScreen extends StatelessWidget {
                 fontSize: 24.0),
           ),
           shape: StadiumBorder(),
-          onPressed: () => Navigator.pushNamed(context, '/login'),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LoginBlocProvider(child: LoginScreen())));
+          },
         ));
   }
 }

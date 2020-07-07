@@ -33,7 +33,7 @@ class FirestoreProvider {
           currentUser["email"], currentUser["photoUrl"], null));
     } catch (e) {
       print(e.message);
-      throw e;
+      throw e.message;
     }
   }
 
@@ -71,7 +71,7 @@ class FirestoreProvider {
           User(user.uid, user.displayName, user.email, user.photoUrl, null));
     } catch (e) {
       print(e.message);
-      throw e;
+      throw e.message;
     }
   }
 
@@ -100,7 +100,7 @@ class FirestoreProvider {
       });
     } catch (e) {
       print(e.message);
-      throw e;
+      throw e.message;
     }
   }
 
