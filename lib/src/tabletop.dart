@@ -15,6 +15,7 @@ class TabletopApp extends StatelessWidget {
       title: 'Tabletop',
       theme: appTheme(),
       initialRoute: '/',
+      debugShowCheckedModeBanner: false,
       routes: routes,
     );
   }

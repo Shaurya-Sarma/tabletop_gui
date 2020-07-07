@@ -1,4 +1,4 @@
-package com.example.tabletop_gui
+package com.tabletop.games
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:768947944894:android:c1a876ed0376b8d0e98def",
+        "mobilesdk_app_id": "1:768947944894:android:ee01d1cb7a6e4742e98def",
         "android_client_info": {
-          "package_name": "com.example.tabletop_gui"
+          "package_name": "com.tabletop.games"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "768947944894-c4ujqqe4fpfjqemvvknca74qbhefklub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tabletop.games",
+            "certificate_hash": "b3a71a172e6b39f265478ef1c137c116a72111a0"
+          }
+        },
         {
           "client_id": "768947944894-aj3si62be6sgj5tvnob12hpc5hd5csoc.apps.googleusercontent.com",
           "client_type": 3
