@@ -105,7 +105,7 @@ class FirestoreProvider {
   }
 
   // Send User Password Reset Mail
-  void sendPasswordResetEmail(String email) async {
+  Future<void> sendPasswordResetEmail(String email) async {
     return _auth.sendPasswordResetEmail(email: email);
   }
 

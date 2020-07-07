@@ -50,7 +50,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       image: DecorationImage(
                           image:
                               AssetImage('assets/images/login_background.png'),
-                          fit: BoxFit.cover))),
+                          fit: BoxFit.cover)),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        left: 30,
+                        top: 50,
+                        child: GestureDetector(
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 30.0,
+                          ),
+                          onTap: () => Navigator.pop(ctx),
+                        ),
+                      )
+                    ],
+                  )),
               FadeIn(
                   1.0,
                   Container(
@@ -104,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       horizontal: 30.0,
                     ),
                     alignment: Alignment.centerRight,
-                    child: forgotPassword(),
+                    child: forgotPassword(ctx),
                   )),
               FadeIn(2.0, loginBtn(ctx)),
               FadeIn(2.0, googleSignInBtn(ctx)),
@@ -150,10 +166,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget forgotPassword() {
+  Widget forgotPassword(BuildContext ctx) {
     return GestureDetector(
         onTap: () {
-          _bloc.sendPasswordResetEmail();
+          _bloc.sendPasswordResetEmail().catchError((err) {
+            showErrorMessage(
+                "User Not Found. Please Enter A Valid Email.", ctx);
+          });
         },
         child: Text(
           "Forgot Password?",
@@ -219,7 +238,7 @@ class _LoginScreenState extends State<LoginScreen> {
         errorMessage,
         style: TextStyle(fontWeight: FontWeight.w500),
       ),
-      duration: new Duration(seconds: 5),
+      duration: new Duration(seconds: 4),
       backgroundColor: Colors.red,
     );
     Scaffold.of(ctx).showSnackBar(snackbar);

@@ -89,8 +89,8 @@ class LoginBloc extends BaseBloc {
         _email.value, _password.value, _username.value);
   }
 
-  void sendPasswordResetEmail() {
-    repository.sendPasswordResetEmail(_email.value);
+  Future<void> sendPasswordResetEmail() {
+    return repository.sendPasswordResetEmail(_email.value);
   }
 
   void dispose() async {

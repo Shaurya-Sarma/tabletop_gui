@@ -21,7 +21,7 @@ class Repository {
           String email, String password, String username) =>
       _firestoreProvider.registerWithEmail(email, password, username);
 
-  void sendPasswordResetEmail(String email) =>
+  Future<void> sendPasswordResetEmail(String email) =>
       _firestoreProvider.sendPasswordResetEmail(email);
 
   Stream<User> currentUser() {
