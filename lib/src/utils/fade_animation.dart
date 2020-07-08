@@ -4,8 +4,9 @@ import 'package:simple_animations/simple_animations.dart';
 class FadeIn extends StatelessWidget {
   final double delay;
   final Widget child;
+  final double startPos;
 
-  FadeIn(this.delay, this.child);
+  FadeIn(this.delay, this.child, this.startPos);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class FadeIn extends StatelessWidget {
       Track("opacity")
           .add(Duration(milliseconds: 500), Tween(begin: 0.0, end: 1.0)),
       Track("translateX").add(
-          Duration(milliseconds: 500), Tween(begin: -30.0, end: 0.0),
+          Duration(milliseconds: 500), Tween(begin: startPos, end: 0.0),
           curve: Curves.easeOut)
     ]);
 

@@ -3,7 +3,7 @@ class StringConstant {
   static const String emailValidateMessage = "Enter a valid email";
   static const String emailHint = "Enter An Email ID";
 
-  static const String usernameField = "Username";
+  static const String usernameFieldLabel = "Username";
   static const String usernameValidateMessage = "Please enter a valid username";
 
   static const String passwordFieldLabel = "Password";

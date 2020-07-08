@@ -64,7 +64,8 @@ flutter:
   assets:
     - assets/images/tabletop_logo.png
     - assets/images/login_background.png
-    - assets/images/background.jpg
+    - assets/images/register_background.png
+    - assets/images/welcome_background.jpg
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
     - assets/images/fifteen_puzzle_thumbnail.jpg

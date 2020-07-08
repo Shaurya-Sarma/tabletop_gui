@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc.dart';
+import 'package:tabletop_gui/src/utils/snackbar_utils.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 import 'package:tabletop_gui/src/utils/fade_animation.dart';
 
@@ -85,7 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 46.0,
                                     color: Color(0xff4A00E0),
                                     fontWeight: FontWeight.w900))
-                          ])))),
+                          ]))),
+                  -30.0),
               FadeIn(
                   1.5,
                   Container(
@@ -112,7 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               blurRadius: 20.0,
                               offset: Offset(0, 10))
                         ]),
-                  )),
+                  ),
+                  -30.0),
               FadeIn(
                   1.5,
                   Container(
@@ -121,9 +124,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     alignment: Alignment.centerRight,
                     child: forgotPassword(ctx),
-                  )),
-              FadeIn(2.0, loginBtn(ctx)),
-              FadeIn(2.0, googleSignInBtn(ctx)),
+                  ),
+                  -30.0),
+              FadeIn(2.0, loginBtn(ctx), -30.0),
+              FadeIn(2.0, googleSignInBtn(ctx), -30.0),
             ],
           ),
         ));
@@ -170,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
         onTap: () {
           _bloc.sendPasswordResetEmail().catchError((err) {
-            showErrorMessage(
+            SnackbarUtils.showErrorMessage(
                 "User Not Found. Please Enter A Valid Email.", ctx);
           });
         },
@@ -187,10 +191,11 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () {
           if (_bloc.validateFields()) {
             _bloc.loginWithEmail().catchError((err) {
-              showErrorMessage("$err Please Try Again.", ctx);
+              SnackbarUtils.showErrorMessage("$err Please Try Again.", ctx);
             });
           } else {
-            showErrorMessage("Invalid Fields! Please Try Again.", ctx);
+            SnackbarUtils.showErrorMessage(
+                "Invalid Fields! Please Try Again.", ctx);
           }
         },
         padding: EdgeInsets.all(0.0),
@@ -224,23 +229,12 @@ class _LoginScreenState extends State<LoginScreen> {
         Buttons.Google,
         onPressed: () {
           _bloc.loginWithGoogle().catchError((err) =>
-              showErrorMessage("Error Occured! Please Try Again!", ctx));
+              SnackbarUtils.showErrorMessage(
+                  "Error Occured! Please Try Again!", ctx));
         },
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       ),
     );
-  }
-
-  void showErrorMessage(String errorMessage, BuildContext ctx) {
-    final snackbar = SnackBar(
-      content: Text(
-        errorMessage,
-        style: TextStyle(fontWeight: FontWeight.w500),
-      ),
-      duration: new Duration(seconds: 4),
-      backgroundColor: Colors.red,
-    );
-    Scaffold.of(ctx).showSnackBar(snackbar);
   }
 }
