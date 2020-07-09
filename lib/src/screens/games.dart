@@ -10,15 +10,19 @@ import 'package:tabletop_gui/src/utils/strings.dart';
 class GamesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 50.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          twentyNine(context),
-          snakeGame(context),
-          fifteenPuzzle(context)
-        ],
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 50.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              twentyNine(context),
+              snakeGame(context),
+              fifteenPuzzle(context)
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -35,15 +35,13 @@ class WelcomeScreen extends StatelessWidget {
             )));
   }
 
-  //  colorFilter: ColorFilter.mode(
-  //               Color(0xff00B16A).withOpacity(0.6), BlendMode.srcATop)
-
   Decoration backgroundImage() {
     return BoxDecoration(
         image: DecorationImage(
-      image: AssetImage('assets/images/welcome_background.jpg'),
-      fit: BoxFit.cover,
-    ));
+            image: AssetImage('assets/images/welcome_background.jpg'),
+            fit: BoxFit.cover,
+            colorFilter:
+                ColorFilter.mode(Color(0x88000000), BlendMode.srcATop)));
   }
 
   Widget signUpButton(BuildContext context) {
@@ -51,7 +49,7 @@ class WelcomeScreen extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 40.0),
       child: SizedBox(
           width: double.infinity,
-          height: 55,
+          height: 60,
           child: OutlineButton(
             child: Text(
               StringConstant.signUpButtonLabel,
@@ -78,7 +76,7 @@ class WelcomeScreen extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 40.0),
       child: SizedBox(
           width: double.infinity,
-          height: 55,
+          height: 60,
           child: RaisedButton(
             child: Text(
               StringConstant.loginButtonLabel,

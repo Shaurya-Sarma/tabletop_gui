@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:page_view_indicators/circle_page_indicator.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 
 import 'package:tabletop_gui/src/models/user.dart';
-import 'package:tabletop_gui/src/screens/widgets/logo.dart';
 
 import 'package:tabletop_gui/src/screens/games.dart';
 import 'package:tabletop_gui/src/screens/profile.dart';
@@ -17,45 +17,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  PageController _controller = PageController(
+    initialPage: 0,
+  );
+  final _currentPageNotifier = ValueNotifier<int>(0);
 
-  List<Widget> _children() => <Widget>[
-        ProfileScreen(user: widget.user),
-        GamesScreen(),
-        LoginBlocProvider(child: SettingsScreen()),
-      ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> children = _children();
+    return Stack(children: <Widget>[_buildPageView(), _buildCircleIndicator()]);
+  }
 
-    return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          Container(alignment: Alignment.center, child: TabletopLogo()),
-          children[_selectedIndex]
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), title: Text("Profile")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.gamepad), title: Text("Games")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), title: Text("Settings")),
-        ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
+  Widget _buildPageView() {
+    return PageView(
+      controller: _controller,
+      children: <Widget>[
+        GamesScreen(),
+        ProfileScreen(user: widget.user),
+        LoginBlocProvider(
+          child: SettingsScreen(),
+        )
+      ],
+      onPageChanged: (int index) {
+        _currentPageNotifier.value = index;
+      },
     );
+  }
+
+  Widget _buildCircleIndicator() {
+    return Positioned(
+        left: 0,
+        right: 0,
+        bottom: 20,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: CirclePageIndicator(
+            size: 12.0,
+            selectedSize: 12.0,
+            dotSpacing: 30.0,
+            currentPageNotifier: _currentPageNotifier,
+            itemCount: 3,
+          ),
+        ));
   }
 }
