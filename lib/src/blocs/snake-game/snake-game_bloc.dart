@@ -8,9 +8,19 @@ class SnakeGameBloc {
   static int tilesPerRow = 15;
 
   static Random randomPos = Random();
+
   int foodPos = randomPos.nextInt(numOfTiles - tilesPerRow);
   void generateFruitPos() {
     foodPos = randomPos.nextInt(numOfTiles - tilesPerRow);
+  }
+
+  int spikePos;
+  void generateSpikePos() {
+    if (randomPos.nextInt(5) == 0 && snakeCellPos.length > 6) {
+      spikePos = randomPos.nextInt(numOfTiles - tilesPerRow);
+    } else {
+      spikePos = null;
+    }
   }
 
   List<List<dynamic>> snakeCellPos = [
@@ -64,6 +74,7 @@ class SnakeGameBloc {
 
     if (snakeCellPos.last[0] == foodPos) {
       generateFruitPos();
+      generateSpikePos();
       AudioManager.playSound("pickup_fruit.mp3", 1.2);
     } else {
       snakeCellPos.removeAt(0);
@@ -98,6 +109,11 @@ class SnakeGameBloc {
           return true;
         }
       }
+    }
+
+    if (snakeCellPos.last[0] == spikePos) {
+      AudioManager.playSound("snake_death.mp3", 1.3);
+      return true;
     }
 
     return false;

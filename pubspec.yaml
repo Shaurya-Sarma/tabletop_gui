@@ -75,9 +75,9 @@ flutter:
     - assets/images/blue_banner.png
     - assets/images/orange_banner.png
 
-    - assets/images/snake_game_thumbnail.png
-    - assets/images/war_thumbnail.jpg
-    - assets/images/fifteen_puzzle_thumbnail.jpg
+    - assets/images/war_art.png
+    - assets/images/war_logo.png
+    - assets/images/war_background.png
 
     - assets/images/Felt.png
     - assets/images/cards/empty_of_empty.png
@@ -143,6 +143,7 @@ flutter:
     - assets/audio/game_win.mp3
 
     - assets/images/apple_sprite.png
+    - assets/images/spikeball_sprite.png
     - assets/images/snake_sprites/snake-tail-right.png
     - assets/images/snake_sprites/snake-tail-left.png
     - assets/images/snake_sprites/snake-tail-down.png

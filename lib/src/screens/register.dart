@@ -195,13 +195,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onPressed: () {
           if (_bloc.validateFields()) {
             _bloc.registerWithEmail().then((value) {
+              SnackbarUtils.showSuccessMessage(
+                  "User Successfully Created!", ctx);
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
                           LoginBlocProvider(child: LoginScreen())));
-              SnackbarUtils.showSuccessMessage(
-                  "User Successfully Created!", ctx);
             }).catchError((err) {
               SnackbarUtils.showErrorMessage("$err Please Try Again.", ctx);
             });

@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Icon(
                             Icons.arrow_back,
                             color: Colors.white,
-                            size: 30.0,
+                            size: 35.0,
                           ),
                           onTap: () => Navigator.pop(ctx),
                         ),

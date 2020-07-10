@@ -33,6 +33,7 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
       [199, 'right'],
       [200, 'right']
     ];
+    _bloc.snakeDirection = "right";
     isGameActive = true;
     Timer.periodic(_bloc.tickSpeed, (timer) {
       updateSnakePos();
@@ -78,6 +79,7 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
                             Container(color: Colors.green),
                             addFruit(index),
                             addSnake(index),
+                            addSpike(index),
                           ],
                         ),
                       );
@@ -88,6 +90,7 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
                             Container(color: Colors.green[400]),
                             addFruit(index),
                             addSnake(index),
+                            addSpike(index),
                           ],
                         ),
                       );
@@ -158,8 +161,18 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
     if (_bloc.snakeCellPos.any((element) => element[0] == index)) {
       return ClipRRect(
           child: Container(
-        color: Colors.blue[700],
+        color: Colors.orange[800],
       ));
+    } else {
+      return Container();
+    }
+  }
+
+  Widget addSpike(int index) {
+    if (_bloc.spikePos == index) {
+      return Image(
+        image: AssetImage("assets/images/spikeball_sprite.png"),
+      );
     } else {
       return Container();
     }

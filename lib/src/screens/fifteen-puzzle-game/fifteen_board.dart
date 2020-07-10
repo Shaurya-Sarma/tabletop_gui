@@ -67,7 +67,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
         _bloc.tileNumbers[emptyTileIndex] = clickedTileNumber;
         numberOfMoves += 1;
       });
-      AudioManager.playSound("fifteen_tile_slide.mp3", 2.0);
+      AudioManager.playSound("fifteen_tile_slide.mp3", 2.2);
       checkWin();
     }
   }
@@ -112,9 +112,9 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.brown[100],
+        color: Colors.brown[50],
         padding: EdgeInsets.symmetric(
-          horizontal: 40.0,
+          horizontal: 30.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -122,14 +122,29 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
             backArrow(),
             timer(),
             gameBoard(),
-            actionButtons(),
+            actionButton(),
             Padding(
-              padding: EdgeInsets.only(top: 20.0),
+              padding: EdgeInsets.only(top: 10.0),
               child: Text("$numberOfMoves Moves",
                   style:
-                      TextStyle(fontWeight: FontWeight.w400, fontSize: 24.0)),
-            )
+                      TextStyle(fontWeight: FontWeight.w600, fontSize: 24.0)),
+            ),
           ],
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(16),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _bloc.tileNumbers.shuffle();
+            });
+            resetGame();
+            pauseStopwatch();
+          },
+          tooltip: "Shuffle Board",
+          backgroundColor: Colors.teal[400],
+          child: Icon(Icons.shuffle),
         ),
       ),
     );
@@ -146,7 +161,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
           },
           child: Icon(
             Icons.arrow_back,
-            size: 30.0,
+            size: 35.0,
           )),
     );
   }
@@ -160,12 +175,12 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
 
   Widget gameBoard() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0),
+      padding: EdgeInsets.all(10.0),
       child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: Container(
-              color: Color(0xFFa2917d),
               height: 400,
+              color: Color(0xFFa2917d),
               child: GridView.builder(
                 itemCount: FifteenBloc.numOfTiles,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -196,7 +211,7 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
         child: Container(
           color: _bloc.tileNumbers[number] == number + 1
               ? Colors.teal[600]
-              : Colors.brown[100],
+              : Colors.brown[50],
           height: 400 / 4,
           child: Center(
             child: Text("${_bloc.tileNumbers[number]}",
@@ -212,50 +227,33 @@ class _FifteenPuzzleBoardState extends State<FifteenPuzzleBoard> {
     }
   }
 
-  Widget actionButtons() {
-    return ButtonBar(
-      alignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        MaterialButton(
-          onPressed: () {
-            startStopwatch();
-          },
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Icon(
-            Icons.play_arrow,
-            size: 20,
+  Widget actionButton() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+      child: RaisedButton(
+        onPressed: () {
+          isTimerActive ? pauseStopwatch() : startStopwatch();
+        },
+        padding: EdgeInsets.all(0.0),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Container(
+          height: 50,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                  colors: [Color(0xff636363), Color(0xffa2ab58)])),
+          child: Center(
+            child: Text(
+              isTimerActive ? "PAUSE" : "PLAY",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0),
+            ),
           ),
-          padding: EdgeInsets.all(14),
-          shape: CircleBorder(),
         ),
-        MaterialButton(
-          onPressed: () {
-            pauseStopwatch();
-          },
-          color: Colors.blue,
-          textColor: Colors.white,
-          child: Icon(
-            Icons.pause,
-            size: 20,
-          ),
-          padding: EdgeInsets.all(14),
-          shape: CircleBorder(),
-        ),
-        RaisedButton(
-          child: Text("New Puzzle",
-              style: TextStyle(color: Colors.white, fontSize: 18.0)),
-          color: Colors.teal,
-          padding: EdgeInsets.all(12),
-          onPressed: () {
-            setState(() {
-              _bloc.tileNumbers.shuffle();
-            });
-            resetGame();
-            pauseStopwatch();
-          },
-        )
-      ],
+      ),
     );
   }
 
