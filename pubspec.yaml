@@ -68,6 +68,13 @@ flutter:
     - assets/images/login_background.png
     - assets/images/register_background.png
     - assets/images/profile_art.png
+    - assets/images/arcade_icon.png
+    - assets/images/cards_icon.png
+    - assets/images/puzzle_icon.png
+    - assets/images/green_banner.png
+    - assets/images/blue_banner.png
+    - assets/images/orange_banner.png
+
     - assets/images/snake_game_thumbnail.png
     - assets/images/war_thumbnail.jpg
     - assets/images/fifteen_puzzle_thumbnail.jpg
