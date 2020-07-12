@@ -34,7 +34,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
           child: FloatingActionButton(
             child: Icon(Icons.book),
             onPressed: () {
-              _bloc.launchURL();
+              _bloc.launchURL('https://gamerules.com/rules/war-card-game/');
             },
             backgroundColor: Color(0xff0f0c29),
           ),

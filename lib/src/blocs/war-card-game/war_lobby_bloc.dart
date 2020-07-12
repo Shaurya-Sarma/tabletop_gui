@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:tabletop_gui/src/blocs/base_bloc.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class WarLobbyBloc extends BaseBloc {
   final _userJoinCode = BehaviorSubject<String>();
@@ -18,15 +17,6 @@ class WarLobbyBloc extends BaseBloc {
 
   Future<String> joinPrivateGame() async {
     return repository.joinPrivateGame(_userJoinCode.value);
-  }
-
-  void launchURL() async {
-    const url = 'https://gamerules.com/rules/war-card-game/';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
   void dispose() async {

@@ -4,6 +4,7 @@ import 'package:tabletop_gui/src/blocs/login_bloc.dart';
 
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 import 'package:tabletop_gui/src/screens/login.dart';
+import 'package:tabletop_gui/src/screens/welcome.dart';
 import 'package:tabletop_gui/src/utils/fade_animation.dart';
 import 'package:tabletop_gui/src/utils/snackbar_utils.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
@@ -55,7 +56,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 color: Colors.white,
                                 size: 30.0,
                               ),
-                              onTap: () => Navigator.pop(ctx),
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => WelcomeScreen())),
                             ),
                           )
                         ],
@@ -195,8 +199,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onPressed: () {
           if (_bloc.validateFields()) {
             _bloc.registerWithEmail().then((value) {
-              SnackbarUtils.showSuccessMessage(
-                  "User Successfully Created!", ctx);
               Navigator.push(
                   context,
                   MaterialPageRoute(

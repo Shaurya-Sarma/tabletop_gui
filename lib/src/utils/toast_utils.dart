@@ -6,7 +6,7 @@ import 'package:tabletop_gui/src/utils/toast_animation.dart';
 class ToastUtils {
   static Timer toastTimer;
   static OverlayEntry _overlayEntry;
-  static Duration _duration = Duration(seconds: 2);
+  static Duration _duration = Duration(seconds: 4);
 
   static void showToast(
       BuildContext context, String message, Color toastColor) {

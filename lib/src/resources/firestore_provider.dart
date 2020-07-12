@@ -81,6 +81,13 @@ class FirestoreProvider {
     _currentUser.sink.add(User(null, null, null, null, null));
   }
 
+  Future<void> deleteAccount(String uid) async {
+    _firestore.collection("users").document(uid).delete();
+    FirebaseUser user = await _auth.currentUser();
+    user.delete();
+    _currentUser.sink.add(User(null, null, null, null, null));
+  }
+
   // Register User With Email & Password
   Future<void> registerWithEmail(
       String email, String password, String username) async {

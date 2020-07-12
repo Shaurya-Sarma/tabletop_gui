@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_board_bloc_provider.dart';
 import 'package:tabletop_gui/src/models/game.dart';
+import 'package:tabletop_gui/src/models/playing_card.dart';
 import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/models/war_game.dart';
 import 'package:tabletop_gui/src/utils/toast_utils.dart';
@@ -60,15 +61,27 @@ class _BoardScreenState extends State<BoardScreen> {
               children: <Widget>[
                 header(),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      playerOneSide(),
-                      playerBoard(),
-                      playerTwoSide(),
-                    ],
-                  ),
+                  child: StreamBuilder<Object>(
+                      stream: _bloc.currentGame(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          Game game = snapshot.data;
+                          int index = game.players.indexWhere(
+                              (element) => element["email"] == _user.email);
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              playerOneSide(index == 0 ? 1 : 0),
+                              playerBoard(),
+                              playerTwoSide(index),
+                            ],
+                          );
+                        } else {
+                          return Text("Loading...",
+                              style: TextStyle(color: Colors.white));
+                        }
+                      }),
                 ),
               ],
             ),
@@ -161,7 +174,7 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
-  Widget playerOneSide() {
+  Widget playerOneSide(int index) {
     return StreamBuilder(
         stream: _bloc.currentGame(),
         builder: (context, snapshot) {
@@ -171,14 +184,14 @@ class _BoardScreenState extends State<BoardScreen> {
             return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  playerOne(),
+                  playerOne(index),
                   GestureDetector(
                     child: Image(
                         image: AssetImage(
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      cardOnTap(wg, game, 0);
+                      cardOnTap(wg, game, index);
                     },
                   ),
                 ]);
@@ -188,25 +201,31 @@ class _BoardScreenState extends State<BoardScreen> {
         });
   }
 
-  Widget playerOne() {
+  Widget playerOne(int index) {
     return StreamBuilder(
       stream: _bloc.currentGame(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data.players.length >= 1) {
+        if (snapshot.hasData && snapshot.data.players.length == 2) {
           Game game = snapshot.data;
           WarGame wg = game.game as WarGame;
+          bool myTurn = index == 0
+              ? wg != null && wg.playerOneTurn != null && wg.playerOneTurn
+              : wg != null && wg.playerOneTurn != null && !wg.playerOneTurn;
+          List<PlayingCard> myDeck =
+              index == 0 ? wg.playerOneDeck : wg.playerTwoDeck;
           return Column(
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: NetworkImage('${game.players[0]["photoUrl"]}'),
+                backgroundImage:
+                    NetworkImage('${game.players[index]["photoUrl"]}'),
                 radius: 30,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
-                  "${game.players[0]["displayName"]}",
+                  "${game.players[index]["displayName"]}",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: myTurn ? Colors.yellow[600] : Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 18.0),
                 ),
@@ -214,7 +233,7 @@ class _BoardScreenState extends State<BoardScreen> {
               Visibility(
                 visible: wg != null && wg.active != null ? wg.active : false,
                 child: Text(
-                  "${wg.playerOneDeck != null ? wg.playerOneDeck.length : ""} Cards Left",
+                  "${myDeck != null ? myDeck.length : ""} Cards Left",
                   style: TextStyle(
                       fontWeight: FontWeight.w800,
                       fontSize: 24.0,
@@ -248,7 +267,7 @@ class _BoardScreenState extends State<BoardScreen> {
     );
   }
 
-  Widget playerTwoSide() {
+  Widget playerTwoSide(int index) {
     return StreamBuilder(
         stream: _bloc.currentGame(),
         builder: (context, snapshot) {
@@ -264,10 +283,10 @@ class _BoardScreenState extends State<BoardScreen> {
                             'assets/images/cards/empty_of_empty.png'),
                         height: 150),
                     onTap: () {
-                      cardOnTap(wg, game, 1);
+                      cardOnTap(wg, game, index);
                     },
                   ),
-                  playerTwo()
+                  playerTwo(index)
                 ]);
           } else {
             return Container();
@@ -284,34 +303,39 @@ class _BoardScreenState extends State<BoardScreen> {
     }
   }
 
-  Widget playerTwo() {
+  Widget playerTwo(int index) {
     return StreamBuilder(
       stream: _bloc.currentGame(),
       builder: (context, snapshot) {
-        if (snapshot.hasData && snapshot.data.players.length == 2) {
+        if (snapshot.hasData && snapshot.data.players.length >= 1) {
           Game game = snapshot.data;
           WarGame wg = game.game as WarGame;
+          bool myTurn = index == 0
+              ? wg != null && wg.playerOneTurn != null && wg.playerOneTurn
+              : wg != null && wg.playerOneTurn != null && !wg.playerOneTurn;
+          List<PlayingCard> myDeck =
+              index == 0 ? wg.playerOneDeck : wg.playerTwoDeck;
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: NetworkImage('${game.players[1]["photoUrl"]}'),
+                backgroundImage:
+                    NetworkImage('${game.players[index]["photoUrl"]}'),
                 radius: 30,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.0),
                 child: Text(
-                  "${game.players[1]["displayName"]}",
+                  "${game.players[index]["displayName"]}",
                   style: TextStyle(
-                      color: Colors.white,
+                      color: myTurn ? Colors.yellow[600] : Colors.white,
                       fontWeight: FontWeight.w500,
                       fontSize: 18.0),
                 ),
               ),
               Visibility(
                 visible: wg != null && wg.active != null ? wg.active : false,
-                child: Text(
-                    "${wg.playerTwoDeck != null ? wg.playerTwoDeck.length : ""} Cards Left",
+                child: Text("${myDeck != null ? myDeck.length : ""} Cards Left",
                     style: TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: 24.0,
@@ -381,14 +405,18 @@ class _BoardScreenState extends State<BoardScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Image(
-                          image: AssetImage(
-                              'assets/images/cards/${playerTwoRank}_of_$playerTwoSuit.png'),
-                          height: 150),
-                      Image(
-                          image: AssetImage(
-                              'assets/images/cards/${playerOneRank}_of_$playerOneSuit.png'),
-                          height: 150),
+                      playerTwoRank != "empty"
+                          ? Image(
+                              image: AssetImage(
+                                  'assets/images/cards/${playerTwoRank}_of_$playerTwoSuit.png'),
+                              height: 150)
+                          : Container(),
+                      playerOneRank != "empty"
+                          ? Image(
+                              image: AssetImage(
+                                  'assets/images/cards/${playerOneRank}_of_$playerOneSuit.png'),
+                              height: 150)
+                          : Container(),
                     ],
                   ),
                 ),

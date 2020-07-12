@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:tabletop_gui/src/blocs/login_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/login_bloc.dart';
+import 'package:tabletop_gui/src/screens/welcome.dart';
 import 'package:tabletop_gui/src/utils/snackbar_utils.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 import 'package:tabletop_gui/src/utils/fade_animation.dart';
@@ -63,7 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white,
                             size: 35.0,
                           ),
-                          onTap: () => Navigator.pop(ctx),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WelcomeScreen())),
                         ),
                       )
                     ],

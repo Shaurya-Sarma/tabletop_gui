@@ -31,8 +31,8 @@ class WarBoardBloc extends BaseBloc {
 
     deck.shuffle();
 
-    WarGame wg = WarGame(null, null, deck.sublist(0, 4), deck.sublist(26, 30),
-        0, -1, [], false, true);
+    WarGame wg = WarGame(null, null, deck.sublist(0, 26),
+        deck.sublist(26, deck.length), 0, -1, [], false, true);
 
     wg.setActive(true);
 

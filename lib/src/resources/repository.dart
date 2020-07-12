@@ -17,6 +17,9 @@ class Repository {
 
   Future<void> userLogout() => _firestoreProvider.userLogout();
 
+  Future<void> deleteAccount(String uid) =>
+      _firestoreProvider.deleteAccount(uid);
+
   Future<void> registerWithEmail(
           String email, String password, String username) =>
       _firestoreProvider.registerWithEmail(email, password, username);

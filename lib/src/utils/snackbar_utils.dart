@@ -13,13 +13,13 @@ class SnackbarUtils {
     Scaffold.of(ctx).showSnackBar(snackbar);
   }
 
-  static void showSuccessMessage(String errorMessage, BuildContext ctx) {
+  static void showSuccessMessage(String successMessage, BuildContext ctx) {
     final snackbar = SnackBar(
       content: Text(
-        errorMessage,
+        successMessage,
         style: TextStyle(fontWeight: FontWeight.w500),
       ),
-      duration: new Duration(seconds: 2),
+      duration: new Duration(seconds: 4),
       backgroundColor: Colors.green,
     );
     Scaffold.of(ctx).showSnackBar(snackbar);

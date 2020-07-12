@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:tabletop_gui/src/blocs/base_bloc.dart';
+import 'package:tabletop_gui/src/models/user.dart';
 import 'package:tabletop_gui/src/utils/strings.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -82,6 +83,11 @@ class LoginBloc extends BaseBloc {
 
   Future<void> userLogout() {
     return repository.userLogout();
+  }
+
+  Future<void> deleteAccount() async {
+    User user = await currentUser().first;
+    return repository.deleteAccount(user.uid);
   }
 
   Future<void> registerWithEmail() {
