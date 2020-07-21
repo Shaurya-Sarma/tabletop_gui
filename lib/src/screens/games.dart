@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tabletop_gui/src/blocs/fifteen-puzzle-game/fifteen_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/snake-game/snake-game_bloc_provider.dart';
+import 'package:tabletop_gui/src/blocs/sudoku-game/sudoku_bloc_provider.dart';
 import 'package:tabletop_gui/src/blocs/war-card-game/war_lobby_bloc_provider.dart';
 import 'package:tabletop_gui/src/screens/fifteen-puzzle-game/fifteen_board.dart';
 import 'package:tabletop_gui/src/screens/snake-game/snake-game_board.dart';
+import 'package:tabletop_gui/src/screens/sudoku-game/sudoku_board.dart';
 import 'package:tabletop_gui/src/screens/war-card-game/war_lobby.dart';
 
 class GamesScreen extends StatefulWidget {
@@ -44,6 +46,17 @@ class _GamesScreenState extends State<GamesScreen> {
                                     child: SnakeGameBoard(),
                                   )));
                     }),
+                GestureDetector(
+                  child: _buildGameCard("puzzle_icon.png", "Sudoku"),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SudokuBlocProvider(
+                                  child: SudokuBoard(),
+                                )));
+                  },
+                ),
                 GestureDetector(
                     child: _buildGameCard("cards_icon.png", "War"),
                     onTap: () {

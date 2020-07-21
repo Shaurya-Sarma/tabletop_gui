@@ -53,6 +53,7 @@ class _SnakeGameBoardState extends State<SnakeGameBoard> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO ADD SCAFFOLD
     return Container(
       color: Colors.green[900],
       child: Padding(

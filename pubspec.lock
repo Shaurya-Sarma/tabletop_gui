@@ -455,6 +455,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  sudoku_api:
+    dependency: "direct main"
+    description:
+      name: sudoku_api
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.1"
   supercharged:
     dependency: transitive
     description:
@@ -476,6 +483,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.15"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   typed_data:
     dependency: transitive
     description:
